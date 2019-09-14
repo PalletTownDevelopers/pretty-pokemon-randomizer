@@ -1,38 +1,36 @@
 package com.likeageek.randomizer;
 
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class AppTest {
     App app = new App();
 
-    @Test
-    public void shouldReplaceViridianCityArenaToCinnabarGym() throws URISyntaxException, IOException {
-        HashMap<String, String> arenas = (HashMap<String, String>) app.getArenas();
-        arenas.put("ViridianCity", "CINNABAR_GYM");
-
-        String outputFileContent = app.convertAsmFile(arenas);
-        String viridianCityExpected = new String(Files.readAllBytes(Paths.get(getClass().getResource("ViridianCity-shuffled.txt").toURI())));
-        assertThat(outputFileContent).isEqualTo(viridianCityExpected);
+    @BeforeEach
+    public void init() {
+        app.seed = 3297392;
+        app.initTowns();
+        app.shuffleArenas();
     }
 
-    @Test
-    public void shouldReplaceVermilionCityArenaToSaffronGym() throws URISyntaxException, IOException {
-        HashMap<String, String> arenas = (HashMap<String, String>) app.getArenas();
-        arenas.put("VermilionCity", "SAFFRON_GYM");
-
-        String outputFileContent = app.convertAsmFile(arenas);
-        String viridianCityExpected = new String(Files.readAllBytes(Paths.get(getClass().getResource("VermilionCity-shuffled.txt").toURI())));
-        assertThat(outputFileContent).isEqualTo(viridianCityExpected);
+    @ParameterizedTest
+    @ValueSource(strings = {"ViridianCity", "VermilionCity", "CeruleanCity", "PewterCity", "CeladonCity", "FuchsiaCity", "SaffronCity", "CinnabarIsland"})
+    public void shouldReplaceViridianCityArenaToCinnabarGym(String town) throws URISyntaxException, IOException {
+        app.convertAsmFile(town);
+        String asmFileShuffled = new String(readAllBytes(get(getClass().getResource(town + "-shuffled.txt").toURI())));
+        String expectedAsmFile = new String(readAllBytes(get("/home/likeageek/IdeaProjects/" + town + "-shuffled.asm")));
+        assertThat(expectedAsmFile).isEqualTo(asmFileShuffled);
     }
 
     @Test

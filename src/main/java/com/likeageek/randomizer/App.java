@@ -1,11 +1,12 @@
 package com.likeageek.randomizer;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
 import java.util.*;
 
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
 import static java.util.Collections.shuffle;
 
@@ -17,21 +18,45 @@ public class App {
         System.out.println("Hello World!");
     }
 
-    public String convertAsmFile(HashMap<String, String> arenas) throws URISyntaxException, IOException {
-        String town = arenas.keySet().toArray()[0].toString();
-        String arena = arenas.get(arenas.keySet().toArray()[0]);
+    public void convertAsmFile(String town) throws IOException {
+        String arena = arenas.get(town);
 
-        String viridianCityAsm = new String(Files.readAllBytes(Paths.get(getClass().getResource(town + ".asm").toURI())));
+        String viridianCityAsm = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/mapObjects/" + town + ".asm")));
+        ;
         String[] lines = viridianCityAsm.split("\n\t");
-        if(town.equals("ViridianCity")){
-            String viridianGymElement = replace(lines[7], arena);
-            lines[7] = viridianGymElement  + "\n";
-        }else{
-            String vermilionGymElement = replace(lines[6], arena);
-            lines[6] = vermilionGymElement;
+
+        if (town.equals("ViridianCity")) {
+            String viridianCity = replace(lines[7], arena);
+            lines[7] = viridianCity + "\n";
+        }
+        if (town.equals("CeladonCity")) {
+            String viridianCity = replace(lines[9], arena);
+            lines[9] = viridianCity;
+        } else if (town.equals("VermilionCity")) {
+            String cinnabarIsland = replace(lines[6], arena);
+            lines[6] = cinnabarIsland;
+        } else if (town.equals("CeruleanCity")) {
+            String cinnabarIsland = replace(lines[6], arena);
+            lines[6] = cinnabarIsland;
+        } else if (town.equals("PewterCity")) {
+            String cinnabarIsland = replace(lines[5], arena);
+            lines[5] = cinnabarIsland;
+        } else if (town.equals("FuchsiaCity")) {
+            String cinnabarIsland = replace(lines[8], arena);
+            lines[8] = cinnabarIsland;
+        } else if (town.equals("SaffronCity")) {
+            String cinnabarIsland = replace(lines[5], arena);
+            lines[5] = cinnabarIsland;
+        } else if (town.equals("CinnabarIsland")) {
+            String cinnabarIsland = replace(lines[4], arena);
+            lines[4] = cinnabarIsland;
         }
 
-        return String.join("\n\t", lines);
+        String content = String.join("\n\t", lines);
+        FileWriter fileWriter = new FileWriter("/home/likeageek/IdeaProjects/" + town + "-shuffled.asm");
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.print(content);
+        printWriter.close();
     }
 
     public void shuffleArenas() {
