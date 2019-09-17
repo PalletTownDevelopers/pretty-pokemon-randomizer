@@ -14,7 +14,8 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GameShakerTest {
+
+public class GameShakerTest {
     private GameShaker gameShaker = new GameShaker();
 
     @Before
