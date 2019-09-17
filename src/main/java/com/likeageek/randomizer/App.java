@@ -1,12 +1,11 @@
 package com.likeageek.randomizer;
 
-import lombok.Data;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+import static com.likeageek.randomizer.TownBuilder.town;
 import static com.likeageek.randomizer.Towns.*;
 import static java.lang.String.join;
 import static java.nio.file.Files.readAllBytes;
@@ -14,11 +13,11 @@ import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
 import static java.util.Collections.shuffle;
 
-@Data
 public class App {
     private static final String SAVE_FILE_PATH = "/home/likeageek/IdeaProjects/";
     private static final String SAVE_FILE_SUFFIX = "-shuffled.asm";
     private static final String POKEMON_SOURCE_TOWNS_PATH = "/home/likeageek/Projects/randomizer-cache/mapObjects/";
+
     protected int seed;
     protected Map<String, String> shuffledArenas = new HashMap<>();
 
@@ -49,14 +48,14 @@ public class App {
 
     public List<Town> initTowns() {
         return asList(
-                Town.builder().name(ViridianCity).arena("VIRIDIAN_GYM").build(),
-                Town.builder().name(VermilionCity).arena("VERMILION_GYM").build(),
-                Town.builder().name(CeruleanCity).arena("CERULEAN_GYM").build(),
-                Town.builder().name(PewterCity).arena("PEWTER_GYM").build(),
-                Town.builder().name(CeladonCity).arena("CELADON_GYM").build(),
-                Town.builder().name(FuchsiaCity).arena("FUCHSIA_GYM").build(),
-                Town.builder().name(SaffronCity).arena("SAFFRON_GYM").build(),
-                Town.builder().name(CinnabarIsland).arena("CINNABAR_GYM").build());
+                town().name(ViridianCity).arena("VIRIDIAN_GYM").build(),
+                town().name(VermilionCity).arena("VERMILION_GYM").build(),
+                town().name(CeruleanCity).arena("CERULEAN_GYM").build(),
+                town().name(PewterCity).arena("PEWTER_GYM").build(),
+                town().name(CeladonCity).arena("CELADON_GYM").build(),
+                town().name(FuchsiaCity).arena("FUCHSIA_GYM").build(),
+                town().name(SaffronCity).arena("SAFFRON_GYM").build(),
+                town().name(CinnabarIsland).arena("CINNABAR_GYM").build());
     }
 
     private String readAsmTownFile(String townName) throws IOException {
@@ -120,5 +119,17 @@ public class App {
         String[] gymLineElements = line.split(",");
         gymLineElements[3] = " " + arena;
         return join(",", gymLineElements);
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
+    }
+
+    public Map<String, String> getShuffledArenas() {
+        return shuffledArenas;
+    }
+
+    public void setShuffledArenas(Map<String, String> shuffledArenas) {
+        this.shuffledArenas = shuffledArenas;
     }
 }
