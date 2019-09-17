@@ -25,3 +25,9 @@ hs_err_pid*
 # ignore target and .idea
 /target/
 /.idea/
+*.swp
+.classpath
+.factorypath
+.project
+.settings
+tags
