@@ -10,4 +10,4 @@
 
 ## Execute
 
-    java -jar target/randomizer-1.0-SNAPSHOT.jar
+    java -jar target/randomizer-1.0-SNAPSHOT.jar -shake -seed 42

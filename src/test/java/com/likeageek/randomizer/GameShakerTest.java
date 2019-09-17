@@ -14,22 +14,21 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-public class AppTest {
-    private App app = new App();
+class GameShakerTest {
+    private GameShaker gameShaker = new GameShaker();
 
     @Before
     public void init() {
-        app.setSeed(3297392);
-        app.initTowns();
+        gameShaker.setSeed(3297392);
+        gameShaker.initTowns();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"ViridianCity", "VermilionCity", "CeruleanCity", "PewterCity", "CeladonCity", "FuchsiaCity", "SaffronCity", "CinnabarIsland"})
     public void shouldConvertAsmFileForATown(String town) throws URISyntaxException, IOException {
-        app.setShuffledArenas(buildShuffledArenas());
+        gameShaker.setShuffledArenas(buildShuffledArenas());
 
-        app.convertAsmFile(town);
+        gameShaker.convertAsmFile(town);
 
         String asmFileShuffled = new String(readAllBytes(get(getClass().getResource(town + "-shuffled.txt").toURI())));
         String expectedAsmFile = new String(readAllBytes(get("/home/likeageek/IdeaProjects/" + town + "-shuffled.asm")));
@@ -38,9 +37,9 @@ public class AppTest {
 
     @Test
     public void shouldShuffleTownArenas() {
-        app.shuffleArenas();
+        gameShaker.shuffleArenas();
 
-        Map<String, String> arenas = app.getShuffledArenas();
+        Map<String, String> arenas = gameShaker.getShuffledArenas();
         assertThat(arenas.get("ViridianCity")).isEqualTo("CINNABAR_GYM");
         assertThat(arenas.get("VermilionCity")).isEqualTo("SAFFRON_GYM");
         assertThat(arenas.get("CeruleanCity")).isEqualTo("CERULEAN_GYM");
