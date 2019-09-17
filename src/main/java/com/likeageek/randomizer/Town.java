@@ -6,6 +6,6 @@ import lombok.Data;
 @Builder
 @Data
 public class Town {
-    private String name;
+    private Towns name;
     private String arena;
 }
