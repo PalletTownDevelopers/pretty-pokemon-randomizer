@@ -1,46 +1,41 @@
 package com.likeageek.randomizer;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 import static com.likeageek.randomizer.TownBuilder.town;
 import static com.likeageek.randomizer.Towns.*;
 import static java.lang.String.join;
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
 import static java.util.Collections.shuffle;
 
 public class GameShaker {
-
-    private static final String SAVE_FILE_PATH = "/home/likeageek/IdeaProjects/";
-    private static final String SAVE_FILE_SUFFIX = "-shuffled.asm";
-    private static final String POKEMON_SOURCE_TOWNS_PATH = "/home/likeageek/Projects/randomizer-cache/mapObjects/";
-
     protected int seed;
     protected Map<String, String> shuffledArenas = new HashMap<>();
+    private IFileManager asmFileManager;
 
+    public GameShaker(IFileManager asmFileManager) {
+        this.asmFileManager = asmFileManager;
+    }
 
     public void convertAsmFile(String townName) throws IOException {
         String arenaToReplace = shuffledArenas.get(townName);
         String[] asmLinesArray = readAsmTownFile(townName).split("\n\t");
         String asmShuffledFileContent = replaceArenasByTownName(townName, arenaToReplace, asmLinesArray);
-        writeAsmFile(townName, asmShuffledFileContent);
+        asmFileManager.write(townName, asmShuffledFileContent);
     }
 
     public void shuffleArenas() {
         List<Town> towns = this.initTowns();
 
-        List<String> shuffledArenas = new ArrayList<>();
+        List<String> arenas = new ArrayList<>();
         towns.forEach(town -> {
-            shuffledArenas.add(town.getArena());
+            arenas.add(town.getArena());
         });
-        shuffle(shuffledArenas, new Random(seed));
+        shuffle(arenas, new Random(seed));
 
         for (int i = 0; i < towns.size(); i++) {
-            this.shuffledArenas.put(towns.get(i).getName().toString(), shuffledArenas.get(i));
+            this.shuffledArenas.put(towns.get(i).getName().toString(), arenas.get(i));
         }
     }
 
@@ -57,7 +52,7 @@ public class GameShaker {
     }
 
     private String readAsmTownFile(String townName) throws IOException {
-        return new String(readAllBytes(get(POKEMON_SOURCE_TOWNS_PATH + townName + ".asm")));
+        return asmFileManager.read(townName);
     }
 
     private String replaceArenasByTownName(String townName, String arena, String[] lines) {
@@ -104,13 +99,6 @@ public class GameShaker {
             }
         }
         return join("\n\t", lines);
-    }
-
-    private void writeAsmFile(String townName, String asmSourceCode) throws IOException {
-        FileWriter fileWriter = new FileWriter(SAVE_FILE_PATH + townName + SAVE_FILE_SUFFIX);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.print(asmSourceCode);
-        printWriter.close();
     }
 
     private String replace(String line, String arena) {
