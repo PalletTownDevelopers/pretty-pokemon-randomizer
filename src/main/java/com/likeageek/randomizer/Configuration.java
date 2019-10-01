@@ -2,29 +2,30 @@ package com.likeageek.randomizer;
 
 public class Configuration {
     private int seed;
-    private String pokemonPath;
-    private String outputPath;
+    private String pokemonDirectory;
+    private String outputDirectory;
 
     public void setSeed(int seed) {
         this.seed = seed;
     }
 
-    public void setPokemonPath(String pokemonPath) {
-        this.pokemonPath = pokemonPath;
+    public void setPokemonDirectory(String pokemonDirectory) {
+        this.pokemonDirectory = pokemonDirectory;
     }
 
-    public void setOutputPath(String outputPath) {
-        this.outputPath = outputPath;
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectory = outputDirectory;
     }
+
     public int getSeed() {
         return seed;
     }
 
-    public String getPokemonPath() {
-        return pokemonPath;
+    public String getPokemonDirectory() {
+        return pokemonDirectory;
     }
 
-    public String getOutputPath() {
-        return outputPath;
+    public String getOutputDirectory() {
+        return outputDirectory;
     }
 }

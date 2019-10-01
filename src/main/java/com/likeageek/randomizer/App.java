@@ -9,7 +9,7 @@ import static java.lang.Integer.parseInt;
 
 public class App {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         System.out.println("gameshaker for pokemonredblue");
         Options options = buildCliOptions();
         CommandLineParser parser = new DefaultParser();
@@ -19,10 +19,11 @@ public class App {
             if (cmd.hasOption("seed")) {
                 Configuration configuration = configuration()
                         .seed(parseInt(cmd.getOptionValue("seed")))
-                        .pokemonPath(cmd.getOptionValue("pokemon_path"))
-                        .outputPath(cmd.getOptionValue("output_path"))
+                        .pokemonDirectory(cmd.getOptionValue("pokemon_dir"))
+                        .outputDirectory(cmd.getOptionValue("output_dir"))
                         .build();
-                launch(configuration);
+                GameShaker gameShaker = new GameShaker(configuration);
+                gameShaker.shake();
             }
         }
     }
@@ -31,24 +32,8 @@ public class App {
         Options options = new Options();
         options.addOption("seed", true, "seed for this run");
         options.addOption("shake", false, "shake this game");
-        options.addOption("pokemon_path", true, "path to disassembled pokemon game");
-        options.addOption("output_path", true, "path to shuffled disassembled pokemon game");
+        options.addOption("pokemon_dir", true, "path to disassembled pokemon game");
+        options.addOption("output_dir", true, "path to shuffled disassembled pokemon game");
         return options;
-    }
-
-    private static void launch(Configuration configuration) {
-        GameShaker gameShaker = new GameShaker(new AsmFileManager(configuration.getPokemonPath(), configuration.getOutputPath()));
-        gameShaker.setSeed(configuration.getSeed());
-        gameShaker.shuffleArenas();
-        gameShaker.getShuffledArenas().keySet().forEach(town -> {
-            try {
-                gameShaker.convertAsmFile(town);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        gameShaker.getShuffledArenas().values().forEach(arena -> {
-            System.out.println(arena + "\r\n");
-        });
     }
 }

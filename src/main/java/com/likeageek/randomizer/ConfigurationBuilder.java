@@ -16,13 +16,13 @@ public final class ConfigurationBuilder {
         return this;
     }
 
-    public ConfigurationBuilder pokemonPath(String pokemonPath) {
-        configuration.setPokemonPath(pokemonPath);
+    public ConfigurationBuilder pokemonDirectory(String pokemonPath) {
+        configuration.setPokemonDirectory(pokemonPath);
         return this;
     }
 
-    public ConfigurationBuilder outputPath(String outputPath) {
-        configuration.setOutputPath(outputPath);
+    public ConfigurationBuilder outputDirectory(String outputPath) {
+        configuration.setOutputDirectory(outputPath);
         return this;
     }
 
