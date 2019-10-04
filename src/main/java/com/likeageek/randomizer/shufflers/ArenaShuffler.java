@@ -1,6 +1,7 @@
 package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.Town;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class ArenaShuffler implements IShuffler {
     private Map<String, String> shuffledArenas = new HashMap<>();
     private IFileManager asmFileManager;
     private static final String TOWNS_FILE_PATH = "data/mapObjects/";
+    private RandomEngine randomEngine = new RandomEngine();
 
     public ArenaShuffler(IFileManager asmFileManager) {
         this.asmFileManager = asmFileManager;
@@ -47,11 +49,15 @@ public class ArenaShuffler implements IShuffler {
         return this.shuffledArenas;
     }
 
+    @Override
+    public Map<String, String> getResult() {
+        return this.shuffledArenas;
+    }
+
     private List<String> getRandomArenas(List<Town> towns, int seed) {
         List<String> arenas = new ArrayList<>();
         towns.forEach(town -> arenas.add(town.getArena()));
-        Collections.shuffle(arenas, new Random(seed));
-        return arenas;
+        return randomEngine.random(arenas, seed);
     }
 
     private List<Town> buildTowns() {
@@ -120,9 +126,5 @@ public class ArenaShuffler implements IShuffler {
         String[] gymLineElements = line.split(",");
         gymLineElements[3] = " " + arena;
         return join(",", gymLineElements);
-    }
-
-    public Map<String, String> getResult() {
-        return this.shuffledArenas;
     }
 }

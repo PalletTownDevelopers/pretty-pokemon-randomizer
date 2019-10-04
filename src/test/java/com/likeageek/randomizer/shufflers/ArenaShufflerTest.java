@@ -15,7 +15,6 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class ArenaShufflerTest {
     private ArenaShuffler arenaShuffler;
 
