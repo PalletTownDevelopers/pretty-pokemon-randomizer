@@ -1,24 +1,37 @@
 package com.likeageek.randomizer;
 
 import com.likeageek.randomizer.shufflers.ArenaShuffler;
+import com.likeageek.randomizer.shufflers.EmptyShuffler;
+import com.likeageek.randomizer.shufflers.IShuffler;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import static java.util.Arrays.asList;
 
 public class GameShaker {
     private Configuration configuration;
+    private List<IShuffler> shufflers;
 
     public GameShaker(Configuration configuration) {
         this.configuration = configuration;
     }
 
-    public void shake() throws IOException {
-        ArenaShuffler arenaShuffler = new ArenaShuffler(new AsmFileManager(configuration.getPokemonDirectory(), configuration.getOutputDirectory()));
-        System.out.println("arena shuffler");
-        Map<String, String> shuffledArenas = arenaShuffler.shuffle(configuration.getSeed());
-        arenaShuffler.process(shuffledArenas);
-        arenaShuffler.getShuffledArenas().values().forEach(arena -> {
-            System.out.println(arena + "\r\n");
+    public void shake() {
+        this.shufflers.forEach(suffler -> {
+            Map<String, String> shuffledArenas = suffler.shuffle(configuration.getSeed());
+            suffler.process(shuffledArenas);
+            suffler.getResult().values().forEach(arena -> {
+                System.out.println(arena + "\r\n");
+            });
         });
+    }
+
+    public void load() {
+        this.shufflers = new ArrayList<>(asList(
+                new ArenaShuffler(new AsmFileManager(configuration.getPokemonDirectory(), configuration.getOutputDirectory())),
+                new EmptyShuffler()
+        ));
     }
 }

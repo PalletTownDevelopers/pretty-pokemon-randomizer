@@ -18,16 +18,22 @@ public class ArenaShuffler implements IShuffler {
 
     public ArenaShuffler(IFileManager asmFileManager) {
         this.asmFileManager = asmFileManager;
+        System.out.println("arena shuffler");
     }
 
     @Override
-    public void process(Map<String, String> shuffledEntries) throws IOException {
+    public void process(Map<String, String> shuffledEntries) {
         for (Map.Entry<String, String> entry : shuffledEntries.entrySet()) {
             String townName = entry.getKey();
             String arenaToReplace = shuffledEntries.get(townName);
-            String[] asmLinesArray = readAsmTownFile(townName);
-            String asmShuffledFileContent = replaceArenas(townName, arenaToReplace, asmLinesArray);
-            asmFileManager.write(townName, asmShuffledFileContent);
+            String[] asmLinesArray;
+            try {
+                asmLinesArray = readAsmTownFile(townName);
+                String asmShuffledFileContent = replaceArenas(townName, arenaToReplace, asmLinesArray);
+                asmFileManager.write(townName, asmShuffledFileContent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -116,7 +122,7 @@ public class ArenaShuffler implements IShuffler {
         return join(",", gymLineElements);
     }
 
-    public Map<String, String> getShuffledArenas() {
-        return shuffledArenas;
+    public Map<String, String> getResult() {
+        return this.shuffledArenas;
     }
 }

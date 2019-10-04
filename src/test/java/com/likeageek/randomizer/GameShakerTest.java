@@ -1,7 +1,9 @@
 package com.likeageek.randomizer;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -12,8 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GameShakerTest {
 
-    @Test
-    public void shouldLaunchAndDisplayArenaShuffler() throws IOException {
+    private GameShaker gameShaker;
+
+    @BeforeEach
+    public void setUp() throws FileNotFoundException {
         PrintStream printStream = new PrintStream("out.log");
         System.setOut(printStream);
 
@@ -22,11 +26,17 @@ public class GameShakerTest {
                 .pokemonDirectory("/home/likeageek/Projects/randomizer-output/")
                 .outputDirectory("/home/likeageek/Projects/randomizer-output/")
                 .build();
-        GameShaker gameShaker = new GameShaker(configuration);
+        gameShaker = new GameShaker(configuration);
+        gameShaker.load();
+    }
+
+    @Test
+    public void shouldShakeAndDisplayShuffler() throws IOException {
         gameShaker.shake();
 
         String consoleOutput = new String(readAllBytes(get("out.log")));
         assertThat(consoleOutput).contains("arena shuffler");
+        assertThat(consoleOutput).contains("empty shuffler");
     }
 
 }

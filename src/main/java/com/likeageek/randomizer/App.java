@@ -23,6 +23,7 @@ public class App {
                         .outputDirectory(cmd.getOptionValue("output_dir"))
                         .build();
                 GameShaker gameShaker = new GameShaker(configuration);
+                gameShaker.load();
                 gameShaker.shake();
             }
         }

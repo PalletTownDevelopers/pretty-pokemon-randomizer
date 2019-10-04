@@ -38,7 +38,7 @@ public class ArenaShufflerTest {
 
         arenaShuffler.process(arenas);
 
-        for (Map.Entry<String, String> entry : arenaShuffler.getShuffledArenas().entrySet()) {
+        for (Map.Entry<String, String> entry : arenaShuffler.getResult().entrySet()) {
             String town = entry.getKey();
             String expectedFileShuffled = new String(readAllBytes(get(getClass().getResource("../" + town + "-shuffled.txt").toURI())));
             String asmFileShuffled = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + town + ".asm")));
