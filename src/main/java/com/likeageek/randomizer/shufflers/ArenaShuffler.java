@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 public class ArenaShuffler implements IShuffler {
     private Map<String, String> shuffledArenas = new HashMap<>();
     private IFileManager asmFileManager;
-    private static final String TOWNS = "mapObjects/";
+    private static final String TOWNS_FILE_PATH = "data/mapObjects/";
 
     public ArenaShuffler(IFileManager asmFileManager) {
         this.asmFileManager = asmFileManager;
@@ -26,7 +26,7 @@ public class ArenaShuffler implements IShuffler {
             String townName = entry.getKey();
             String arenaToReplace = shuffledEntries.get(townName);
             String[] asmLinesArray = readAsmTownFile(townName);
-            String asmShuffledFileContent = replaceArenasByTownName(townName, arenaToReplace, asmLinesArray);
+            String asmShuffledFileContent = replaceArenas(townName, arenaToReplace, asmLinesArray);
             asmFileManager.write(townName, asmShuffledFileContent);
         }
     }
@@ -61,10 +61,10 @@ public class ArenaShuffler implements IShuffler {
     }
 
     private String[] readAsmTownFile(String townName) throws IOException {
-        return asmFileManager.read(TOWNS + townName).split("\n\t");
+        return asmFileManager.read(TOWNS_FILE_PATH + townName).split("\n\t");
     }
 
-    private String replaceArenasByTownName(String townName, String arena, String[] lines) {
+    private String replaceArenas(String townName, String arena, String[] lines) {
         switch (townName) {
             case "ViridianCity": {
                 String viridianCity = replace(lines[7], arena);

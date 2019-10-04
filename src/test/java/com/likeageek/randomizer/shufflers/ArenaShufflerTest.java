@@ -41,7 +41,7 @@ public class ArenaShufflerTest {
         for (Map.Entry<String, String> entry : arenaShuffler.getShuffledArenas().entrySet()) {
             String town = entry.getKey();
             String expectedFileShuffled = new String(readAllBytes(get(getClass().getResource("../" + town + "-shuffled.txt").toURI())));
-            String asmFileShuffled = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/mapObjects/" + town + ".asm")));
+            String asmFileShuffled = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + town + ".asm")));
             assertThat(asmFileShuffled).isEqualTo(expectedFileShuffled);
         }
     }
@@ -63,16 +63,16 @@ public class ArenaShufflerTest {
     static class FakeAsmFileManager implements IFileManager {
 
         @Override
-        public void write(String townName, String asmSourceCode) throws IOException {
-            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/mapObjects/" + townName + ".asm");
+        public void write(String filePath, String asmSourceCode) throws IOException {
+            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + filePath + ".asm");
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.print(asmSourceCode);
             printWriter.close();
         }
 
         @Override
-        public String read(String townName) throws IOException {
-            return new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + townName + ".asm")));
+        public String read(String filePath) throws IOException {
+            return new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + filePath + ".asm")));
         }
     }
 }
