@@ -1,4 +1,6 @@
-package com.likeageek.randomizer.shufflers;
+package com.likeageek.randomizer.shufflers.empty;
+
+import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.util.HashMap;
 import java.util.Map;

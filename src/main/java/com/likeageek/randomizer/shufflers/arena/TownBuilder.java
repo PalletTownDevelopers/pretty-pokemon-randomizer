@@ -1,4 +1,4 @@
-package com.likeageek.randomizer;
+package com.likeageek.randomizer.shufflers.arena;
 
 public final class TownBuilder {
     private Town town;
@@ -16,7 +16,7 @@ public final class TownBuilder {
         return this;
     }
 
-    public TownBuilder arena(String arena) {
+    public TownBuilder arena(Arenas arena) {
         town.setArena(arena);
         return this;
     }

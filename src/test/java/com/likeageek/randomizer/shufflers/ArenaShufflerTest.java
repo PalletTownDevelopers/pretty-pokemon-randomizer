@@ -1,6 +1,7 @@
 package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.shufflers.arena.ArenaShuffler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

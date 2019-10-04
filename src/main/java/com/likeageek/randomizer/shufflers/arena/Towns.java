@@ -1,4 +1,4 @@
-package com.likeageek.randomizer;
+package com.likeageek.randomizer.shufflers.arena;
 
 public enum Towns {
     ViridianCity,

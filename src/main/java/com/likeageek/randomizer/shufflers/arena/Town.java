@@ -1,8 +1,8 @@
-package com.likeageek.randomizer;
+package com.likeageek.randomizer.shufflers.arena;
 
 public class Town {
     private Towns name;
-    private String arena;
+    private Arenas arena;
 
     public Towns getName() {
         return name;
@@ -12,11 +12,11 @@ public class Town {
         this.name = name;
     }
 
-    public String getArena() {
+    public Arenas getArena() {
         return arena;
     }
 
-    public void setArena(String arena) {
+    public void setArena(Arenas arena) {
         this.arena = arena;
     }
 }

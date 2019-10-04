@@ -1,14 +1,18 @@
-package com.likeageek.randomizer.shufflers;
+package com.likeageek.randomizer.shufflers.arena;
 
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.RandomEngine;
-import com.likeageek.randomizer.Town;
+import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.likeageek.randomizer.TownBuilder.town;
-import static com.likeageek.randomizer.Towns.*;
+import static com.likeageek.randomizer.shufflers.arena.Arenas.*;
+import static com.likeageek.randomizer.shufflers.arena.TownBuilder.town;
+import static com.likeageek.randomizer.shufflers.arena.Towns.*;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
@@ -56,20 +60,20 @@ public class ArenaShuffler implements IShuffler {
 
     private List<String> getRandomArenas(List<Town> towns, int seed) {
         List<String> arenas = new ArrayList<>();
-        towns.forEach(town -> arenas.add(town.getArena()));
+        towns.forEach(town -> arenas.add(town.getArena().name()));
         return randomEngine.random(arenas, seed);
     }
 
     private List<Town> buildTowns() {
         return asList(
-                town().name(ViridianCity).arena("VIRIDIAN_GYM").build(),
-                town().name(VermilionCity).arena("VERMILION_GYM").build(),
-                town().name(CeruleanCity).arena("CERULEAN_GYM").build(),
-                town().name(PewterCity).arena("PEWTER_GYM").build(),
-                town().name(CeladonCity).arena("CELADON_GYM").build(),
-                town().name(FuchsiaCity).arena("FUCHSIA_GYM").build(),
-                town().name(SaffronCity).arena("SAFFRON_GYM").build(),
-                town().name(CinnabarIsland).arena("CINNABAR_GYM").build());
+                town().name(ViridianCity).arena(VIRIDIAN_GYM).build(),
+                town().name(VermilionCity).arena(VERMILION_GYM).build(),
+                town().name(CeruleanCity).arena(CERULEAN_GYM).build(),
+                town().name(PewterCity).arena(PEWTER_GYM).build(),
+                town().name(CeladonCity).arena(CELADON_GYM).build(),
+                town().name(FuchsiaCity).arena(FUCHSIA_GYM).build(),
+                town().name(SaffronCity).arena(SAFFRON_GYM).build(),
+                town().name(CinnabarIsland).arena(CINNABAR_GYM).build());
     }
 
     private String[] readAsmTownFile(String townName) throws IOException {
