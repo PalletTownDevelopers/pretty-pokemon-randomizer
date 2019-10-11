@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/style.css"/>
+    </head>
+    <body>
+        <header>
+              <!-- Fixed navbar -->
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Pokemon Randomizer</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="row">
+                <h1 class="col-md-12 text-center">Randomization of Pokemon Red/Blue</h1>
+                <form method="POST" action="/generate">
+                    <div class="form-group">
+                        <label>Shake Gyms</label>
+                        <input type="checkbox" name="check-gym"i value="1"/>
+                    </div>
+                    <input type="submit" id="send-settings"/>
+                </form>
+            </div>
+        </div>
+    </body>
+</html> 
