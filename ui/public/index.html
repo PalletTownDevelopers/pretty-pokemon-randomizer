@@ -15,11 +15,20 @@
         <div class="container">
             <div class="row">
                 <h1 class="col-md-12 text-center">Randomization of Pokemon Red/Blue</h1>
-                <form method="POST" action="/generate">
-                    <div class="form-group">
-                        <label>Shake Gyms</label>
-                        <input type="checkbox" name="check-gym"i value="1"/>
-                    </div>
+                <form method="POST" action="/generate" class="col-md-12">
+                        <fieldset class="col-md-12">
+                            <legend>Options</legend>
+                            <div class="form-group form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="check-gym" value="1"/>
+                                <label class="form-check-label">Shake Gyms</label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label">Seed : </label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="seed" value="" class="form-control border" placeholder="Seed"/>
+                                </div>
+                            </div>
+                        </fieldset>
                     <input type="submit" id="send-settings"/>
                 </form>
             </div>
