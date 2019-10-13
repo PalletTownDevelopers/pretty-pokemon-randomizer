@@ -1,8 +1,8 @@
 package com.likeageek.randomizer;
 
+import com.likeageek.randomizer.shufflers.IShuffler;
 import com.likeageek.randomizer.shufflers.arena.ArenaShuffler;
 import com.likeageek.randomizer.shufflers.empty.EmptyShuffler;
-import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.util.ArrayList;
 import java.util.List;

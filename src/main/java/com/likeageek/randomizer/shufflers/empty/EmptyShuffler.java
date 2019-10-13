@@ -12,7 +12,7 @@ public class EmptyShuffler implements IShuffler {
     }
 
     @Override
-    public Map<String, String> shuffle(int seed) {
+    public Map<String, String> shuffle(long seed) {
         return null;
     }
 

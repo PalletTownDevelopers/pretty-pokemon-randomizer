@@ -17,9 +17,9 @@ import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
 public class ArenaShuffler implements IShuffler {
+    private static final String TOWNS_FILE_PATH = "data/mapObjects/";
     private Map<String, String> shuffledArenas = new HashMap<>();
     private IFileManager asmFileManager;
-    private static final String TOWNS_FILE_PATH = "data/mapObjects/";
     private RandomEngine randomEngine = new RandomEngine();
 
     public ArenaShuffler(IFileManager asmFileManager) {
@@ -44,7 +44,7 @@ public class ArenaShuffler implements IShuffler {
     }
 
     @Override
-    public Map<String, String> shuffle(int seed) {
+    public Map<String, String> shuffle(long seed) {
         List<Town> towns = this.buildTowns();
         List<String> randomArenas = getRandomArenas(towns, seed);
         for (int i = 0; i < towns.size(); i++) {
@@ -58,7 +58,7 @@ public class ArenaShuffler implements IShuffler {
         return this.shuffledArenas;
     }
 
-    private List<String> getRandomArenas(List<Town> towns, int seed) {
+    private List<String> getRandomArenas(List<Town> towns, long seed) {
         List<String> arenas = new ArrayList<>();
         towns.forEach(town -> arenas.add(town.getArena().name()));
         return randomEngine.random(arenas, seed);

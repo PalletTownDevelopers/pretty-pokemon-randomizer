@@ -5,9 +5,8 @@
 
 ## Installation
 
-    mvn clean install
-    mvn package
+    mvn clean compile assembly:single
 
 ## Execute
 
-    java -jar target/randomizer-1.0-SNAPSHOT.jar -shake -seed 4242424242 -pokemon_dir "/home/likeageek/Projects/randomizer-cache/" -output_dir "/home/likeageek/Projects/randomizer-output/"
+    ./run.sh

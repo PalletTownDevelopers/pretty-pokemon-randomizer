@@ -11,7 +11,7 @@ public final class ConfigurationBuilder {
         return new ConfigurationBuilder();
     }
 
-    public ConfigurationBuilder seed(int seed) {
+    public ConfigurationBuilder seed(long seed) {
         configuration.setSeed(seed);
         return this;
     }
