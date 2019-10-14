@@ -3,7 +3,6 @@ package com.likeageek.randomizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -17,7 +16,7 @@ public class GameShakerTest {
     private GameShaker gameShaker;
 
     @BeforeEach
-    public void setUp() throws FileNotFoundException {
+    public void setUp() throws IOException {
         PrintStream printStream = new PrintStream("out.log");
         System.setOut(printStream);
 
@@ -26,8 +25,17 @@ public class GameShakerTest {
                 .pokemonDirectory("/home/likeageek/Projects/randomizer-output/")
                 .outputDirectory("/home/likeageek/Projects/randomizer-output/")
                 .build();
-        gameShaker = new GameShaker(configuration);
-        gameShaker.load();
+        gameShaker = new GameShaker(configuration, new FakeAsmFileManager());
+        gameShaker.init();
+    }
+
+    @Test
+    public void shouldInit() throws IOException {
+        gameShaker.init();
+
+        String consoleOutput = new String(readAllBytes(get("out.log")));
+        assertThat(consoleOutput).contains("arena shuffler");
+        assertThat(consoleOutput).contains("empty shuffler");
     }
 
     @Test
@@ -39,4 +47,22 @@ public class GameShakerTest {
         assertThat(consoleOutput).contains("empty shuffler");
     }
 
-}
+    static class FakeAsmFileManager implements IFileManager {
+
+        @Override
+        public void write(String filePath, String asmSourceCode) throws IOException {
+
+        }
+
+        @Override
+        public String read(String filePath) throws IOException {
+            return new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + filePath + ".asm")));
+        }
+
+        @Override
+        public void copyGame()  throws IOException {
+
+        }
+    }
+
+    }

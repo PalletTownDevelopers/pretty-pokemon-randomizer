@@ -74,6 +74,11 @@ public class ArenaShufflerTest {
         public String read(String filePath) throws IOException {
             return new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + filePath + ".asm")));
         }
+
+        @Override
+        public void copyGame() throws IOException {
+
+        }
     }
 }
 

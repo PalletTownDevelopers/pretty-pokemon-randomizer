@@ -2,12 +2,14 @@ package com.likeageek.randomizer;
 
 import org.apache.commons.cli.*;
 
+import java.io.IOException;
+
 import static com.likeageek.randomizer.ConfigurationBuilder.configuration;
 import static java.lang.Long.parseLong;
 
 public class App {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         System.out.println("gameshaker for pokemonredblue");
         Options options = buildCliOptions();
         CommandLineParser parser = new DefaultParser();
@@ -20,8 +22,9 @@ public class App {
                         .pokemonDirectory(cmd.getOptionValue("pokemon_dir"))
                         .outputDirectory(cmd.getOptionValue("output_dir"))
                         .build();
-                GameShaker gameShaker = new GameShaker(configuration);
-                gameShaker.load();
+                AsmFileManager asmFileManager = new AsmFileManager(configuration.getPokemonDirectory(), configuration.getOutputDirectory());
+                GameShaker gameShaker = new GameShaker(configuration, asmFileManager);
+                gameShaker.init();
                 gameShaker.shake();
             }
         }

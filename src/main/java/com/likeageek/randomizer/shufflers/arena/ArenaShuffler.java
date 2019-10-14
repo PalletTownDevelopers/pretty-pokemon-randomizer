@@ -17,7 +17,7 @@ import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
 public class ArenaShuffler implements IShuffler {
-    private static final String TOWNS_FILE_PATH = "data/mapObjects/";
+    private static final String TOWNS_FILE_PATH = "/data/mapObjects/";
     private Map<String, String> shuffledArenas = new HashMap<>();
     private IFileManager asmFileManager;
     private RandomEngine randomEngine = new RandomEngine();
@@ -36,7 +36,7 @@ public class ArenaShuffler implements IShuffler {
             try {
                 asmLinesArray = readAsmTownFile(townName);
                 String asmShuffledFileContent = replaceArenas(townName, arenaToReplace, asmLinesArray);
-                asmFileManager.write(townName, asmShuffledFileContent);
+                asmFileManager.write(TOWNS_FILE_PATH + townName, asmShuffledFileContent);
             } catch (IOException e) {
                 e.printStackTrace();
             }
