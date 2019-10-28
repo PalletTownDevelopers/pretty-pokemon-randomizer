@@ -1,15 +1,20 @@
 DEV_MODE=1
 
-#In DEV mode we use default dir to compile ASM Code
+#In DEV mode we use default dir to compile ASM Code and generate code seed with random function
 if [[ $DEV_MODE == 1 ]]; then
   OUTPUT_DIR="$HOME/wd/pokemon/randomizer-output/"
   CACHE_DIR="$HOME/wd/pokemon/randomizer-cache/"
+  SEED=$RANDOM
+  echo "Developpement mode"
+  echo "output dir = $OUTPUT_DIR"
+  echo "cache dir = $CACHE_DIR"
+  echo "seed = $SEED"
 fi
 
 #Launch shaker
 java -jar target/randomizer-1.0-SNAPSHOT-jar-with-dependencies.jar \
 -shake \
--seed 4242424242 \
+-seed "$SEED" \
 -pokemon_dir "$CACHE_DIR" \
 -output_dir "$OUTPUT_DIR"
 
