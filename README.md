@@ -19,5 +19,5 @@ We have 3 possibility to run the follow script by argument :
     ./run.sh build | full | 
     
 ## Execute website
-    
-    node ui/app.js
+    cd ui
+    node app.js
