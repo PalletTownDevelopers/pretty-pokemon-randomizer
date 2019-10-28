@@ -1,5 +1,6 @@
 DEV_MODE=1
 
+#In DEV mode we use default dir to compile ASM Code
 if [[ $DEV_MODE == 1 ]]; then
   OUTPUT_DIR="$HOME/wd/pokemon/randomizer-output/"
   CACHE_DIR="$HOME/wd/pokemon/randomizer-cache/"
