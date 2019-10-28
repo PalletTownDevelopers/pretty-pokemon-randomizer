@@ -1,11 +1,12 @@
 # randomizer
 
 ## Prerequisites
-1.  install java JDK 11
+1.  Install java JDK 11
 
 ## Installation
-
-    mvn clean compile assembly:single
+Run the following script to install maven packages and node packages for ui
+    
+    ./install.sh
 
 ## Execute
 
