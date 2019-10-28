@@ -26,7 +26,7 @@ launchShaker()
   rm ./*.gbc
 
   #We add permissions to use tools to help compilation
-  chmod -Rf 777 ./*
+  chmod -Rf 777 "$OUTPUT_DIR/*"
 
   #We compile ASM code to build GBC roms
   make
