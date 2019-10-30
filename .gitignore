@@ -40,3 +40,4 @@ hs_err_pid*
 /randomizer.iml
 /stale_outputs_checked
 *.iml
+.DS_STORE
