@@ -38,3 +38,5 @@ hs_err_pid*
 /ui/yarn.lock
 /vendor/
 /randomizer.iml
+/stale_outputs_checked
+*.iml
