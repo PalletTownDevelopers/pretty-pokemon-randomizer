@@ -7,11 +7,22 @@ launchShaker()
   if [[ $DEV_MODE == 1 ]]; then
     OUTPUT_DIR="$HOME/wd/pokemon/randomizer-output/"
     CACHE_DIR="$HOME/wd/pokemon/randomizer-cache/"
+    CODE_DISASSEMBLY="$HOME/wd/pokemon/pokered/"
     SEED=$RANDOM
     echo "Developpement mode"
     echo "output dir = $OUTPUT_DIR"
     echo "cache dir = $CACHE_DIR"
     echo "seed = $SEED"
+  fi
+
+  #we make output dir if it's not exist
+  if [[ ! -d "$OUTPUT_DIR" ]]; then
+    mkdir -pv "$OUTPUT_DIR"
+  fi
+
+  #we make cache dir if it's not exist
+  if [[ ! -d "$CACHE_DIR" ]]; then
+    cp -r $CODE_DISASSEMBLY $CACHE_DIR
   fi
 
   #Launch shaker
@@ -23,10 +34,10 @@ launchShaker()
 
   #Go to output directory and delete old gbc roms
   cd "$OUTPUT_DIR"
-  rm ./*.gbc
+  rm *.gbc
 
   #We add permissions to use tools to help compilation
-  chmod -Rf 777 "$OUTPUT_DIR/*"
+  chmod -Rf 777 "$OUTPUT_DIR"
 
   #We compile ASM code to build GBC roms
   make
