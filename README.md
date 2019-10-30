@@ -3,6 +3,7 @@
 ## Prerequisites
 1.  Install java JDK 11
 2.  Install node and npm
+3.  Install Maven
 
 ## Installation
 Run the following script to install maven packages and node packages for ui
