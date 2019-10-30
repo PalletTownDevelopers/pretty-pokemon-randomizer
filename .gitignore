@@ -30,9 +30,11 @@ hs_err_pid*
 .factorypath
 .project
 .settings
-tags
+/tags
+/ui/tags
 /ui/node_modules/
-ui/package-lock.json
-ui/.tern-project
-ui/yarn.lock
-vendor/
+/ui/package-lock.json
+/ui/.tern-project
+/ui/yarn.lock
+/vendor/
+/randomizer.iml
