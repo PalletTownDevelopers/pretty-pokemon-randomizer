@@ -9,10 +9,12 @@ launchShaker()
     CACHE_DIR="$HOME/wd/pokemon/randomizer-cache/"
     CODE_DISASSEMBLY="$HOME/wd/pokemon/pokered/"
     SEED=$RANDOM
+    SCRIPT_DIR=$(dirname $0)
     echo "Developpement mode"
     echo "output dir = $OUTPUT_DIR"
     echo "cache dir = $CACHE_DIR"
     echo "seed = $SEED"
+    echo "directory of the script = $SCRIPT_DIR"
   fi
 
   #we make output dir if it's not exist
@@ -25,8 +27,10 @@ launchShaker()
     cp -r $CODE_DISASSEMBLY $CACHE_DIR
   fi
 
+
+
   #Launch shaker
-  java -jar target/randomizer-1.0-SNAPSHOT-jar-with-dependencies.jar \
+  java -jar "$SCRIPT_DIR/"target/randomizer-1.0-SNAPSHOT-jar-with-dependencies.jar \
   -shake \
   -seed "$SEED" \
   -pokemon_dir "$CACHE_DIR" \
