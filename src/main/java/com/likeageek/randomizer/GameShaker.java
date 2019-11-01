@@ -1,8 +1,8 @@
 package com.likeageek.randomizer;
 
 import com.likeageek.randomizer.shufflers.IShuffler;
-import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 import com.likeageek.randomizer.shufflers.empty.EmptyShuffler;
+import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ public class GameShaker {
         this.shufflers.forEach(shuffler -> {
             Map<String, String> shuffledArenas = shuffler.shuffle(configuration.getSeed());
             shuffler.process(shuffledArenas);
-            shuffler.getResult().values().forEach(arena -> {
-                System.out.println(arena + "\r\n");
+            shuffler.getResult().forEach((city, gym) -> {
+                System.out.println(city + ":" + gym + "\r\n");
             });
         });
     }

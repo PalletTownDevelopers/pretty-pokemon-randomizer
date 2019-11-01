@@ -19,52 +19,58 @@ import static java.util.Arrays.asList;
 
 public class GymShuffler implements IShuffler {
     private static final String GYMS_FILE_PATH = "/data/mapObjects/";
-    private Map<String, String> gymsShuffled = new HashMap<>();
+    private Map<String, String> gymsRandomized = new HashMap<>();
     private IFileManager asmFileManager;
-    private RandomEngine randomEngine = new RandomEngine();
+    private RandomEngine randomEngine;
+    private List<City> cities;
 
     public GymShuffler(IFileManager asmFileManager) {
         this.asmFileManager = asmFileManager;
+        cities = this.buildCities();
+        randomEngine = new RandomEngine();
         System.out.println("gym shuffler");
     }
 
     @Override
-    public void process(Map<String, String> shuffledEntries) {
-        for (Map.Entry<String, String> entry : shuffledEntries.entrySet()) {
-            String townName = entry.getKey();
-            String arenaToReplace = shuffledEntries.get(townName);
-            String[] asmLinesArray;
-            try {
-                asmLinesArray = readAsmGymFile(townName);
-                String asmShuffledFileContent = replaceGymsIntoCityAsm(townName, arenaToReplace, asmLinesArray);
-                asmFileManager.write(GYMS_FILE_PATH + townName, asmShuffledFileContent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void process(Map<String, String> gyms) {
+        for (Map.Entry<String, String> entry : gyms.entrySet()) {
+            String city = entry.getKey();
+            String gymToReplace = gyms.get(city);
+            buildAsmFile(city, gymToReplace);
+        }
+    }
+
+    private void buildAsmFile(String city, String gymToReplace) {
+        try {
+            String[] lines = readAsmGymFile(city);
+            String fileCityShuffled = buildAsmFileCity(city, gymToReplace, lines);
+            String filePath = GYMS_FILE_PATH + city;
+            asmFileManager.write(filePath, fileCityShuffled);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public Map<String, String> shuffle(long seed) {
-        List<City> cities = this.buildCities();
-        List<String> randomArenas = getRandomGyms(cities, seed);
-        for (int townIndex = 0; townIndex < cities.size(); townIndex++) {
-            String townName = cities.get(townIndex).getName().toString();
-            String townNameReplaced = randomArenas.get(townIndex);
-            this.gymsShuffled.put(townName, townNameReplaced);
+        List<String> gymsRandomized = getGymsRandomized(this.cities, seed);
+        for (int townIndex = 0; townIndex < this.cities.size(); townIndex++) {
+            String city = this.cities.get(townIndex).getName().toString();
+            String gym = gymsRandomized.get(townIndex);
+            this.gymsRandomized.put(city, gym);
         }
-        return this.gymsShuffled;
+        return this.gymsRandomized;
     }
 
     @Override
     public Map<String, String> getResult() {
-        return this.gymsShuffled;
+        return this.gymsRandomized;
     }
 
-    private List<String> getRandomGyms(List<City> cities, long seed) {
-        List<String> arenas = new ArrayList<>();
-        cities.forEach(city -> arenas.add(city.getGym().getName().toString()));
-        return randomEngine.random(arenas, seed);
+    private List<String> getGymsRandomized(List<City> cities, long seed) {
+        List<String> gyms = new ArrayList<>();
+        cities.forEach(city -> gyms.add(city.getGym().getName().toString()));
+        return randomEngine.random(gyms, seed);
     }
 
     private List<City> buildCities() {
@@ -83,7 +89,7 @@ public class GymShuffler implements IShuffler {
         return asmFileManager.read(GYMS_FILE_PATH + townName).split("\n\t");
     }
 
-    private String replaceGymsIntoCityAsm(String cityName, String gymName, String[] lines) {
+    private String buildAsmFileCity(String cityName, String gymName, String[] lines) {
         switch (cityName) {
             case "ViridianCity": {
                 String viridianCity = replace(lines[7], gymName);
