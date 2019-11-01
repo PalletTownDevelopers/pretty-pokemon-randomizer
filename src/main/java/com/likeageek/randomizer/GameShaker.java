@@ -1,7 +1,7 @@
 package com.likeageek.randomizer;
 
 import com.likeageek.randomizer.shufflers.IShuffler;
-import com.likeageek.randomizer.shufflers.arena.ArenaShuffler;
+import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 import com.likeageek.randomizer.shufflers.empty.EmptyShuffler;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class GameShaker {
     public void init() throws IOException {
         asmFileManager.copyGame();
         this.shufflers = new ArrayList<>(asList(
-                new ArenaShuffler(asmFileManager),
+                new GymShuffler(asmFileManager),
                 new EmptyShuffler()
         ));
     }

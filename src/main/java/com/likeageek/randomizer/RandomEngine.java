@@ -1,14 +1,15 @@
 package com.likeageek.randomizer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static java.util.Collections.shuffle;
+
 public class RandomEngine {
-    public List<String> random(List<String> input, long seed) {
-        List<String> output = new ArrayList<>(input);
-        Collections.shuffle(output, new Random(seed));
-        return output;
+    public List<String> random(List<String> values, long seed) {
+        List<String> randomizedValues = new ArrayList<>(values);
+        shuffle(randomizedValues, new Random(seed));
+        return randomizedValues;
     }
 }

@@ -1,6 +1,6 @@
-package com.likeageek.randomizer.shufflers.arena;
+package com.likeageek.randomizer.shufflers.gym;
 
-public enum Towns {
+public enum Cities {
     ViridianCity,
     VermilionCity,
     CeruleanCity,

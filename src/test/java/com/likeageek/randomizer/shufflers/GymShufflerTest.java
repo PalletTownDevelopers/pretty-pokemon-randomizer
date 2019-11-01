@@ -1,7 +1,7 @@
 package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.IFileManager;
-import com.likeageek.randomizer.shufflers.arena.ArenaShuffler;
+import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,12 +16,12 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArenaShufflerTest {
-    private ArenaShuffler arenaShuffler;
+public class GymShufflerTest {
+    private GymShuffler gymShuffler;
 
     @BeforeEach
     public void init() {
-        arenaShuffler = new ArenaShuffler(new FakeAsmFileManager());
+        gymShuffler = new GymShuffler(new FakeAsmFileManager());
     }
 
     @Test
@@ -36,9 +36,9 @@ public class ArenaShufflerTest {
         arenas.put("SaffronCity", "FUCHSIA_GYM");
         arenas.put("CinnabarIsland", "PEWTER_GYM");
 
-        arenaShuffler.process(arenas);
+        gymShuffler.process(arenas);
 
-        for (Map.Entry<String, String> entry : arenaShuffler.getResult().entrySet()) {
+        for (Map.Entry<String, String> entry : gymShuffler.getResult().entrySet()) {
             String town = entry.getKey();
             String expectedFileShuffled = new String(readAllBytes(get(getClass().getResource("../" + town + "-shuffled.txt").toURI())));
             String asmFileShuffled = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + town + ".asm")));
@@ -48,7 +48,7 @@ public class ArenaShufflerTest {
 
     @Test
     public void shouldShuffleTownArenas() {
-        Map<String, String> arenas = arenaShuffler.shuffle(3297392);
+        Map<String, String> arenas = gymShuffler.shuffle(3297392);
 
         assertThat(arenas.get("ViridianCity")).isEqualTo("CINNABAR_GYM");
         assertThat(arenas.get("VermilionCity")).isEqualTo("SAFFRON_GYM");
@@ -64,7 +64,7 @@ public class ArenaShufflerTest {
 
         @Override
         public void write(String filePath, String asmSourceCode) throws IOException {
-            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + filePath + ".asm");
+            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/" + filePath + ".asm");
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.print(asmSourceCode);
             printWriter.close();

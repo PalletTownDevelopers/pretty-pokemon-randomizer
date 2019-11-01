@@ -1,6 +1,6 @@
-package com.likeageek.randomizer.shufflers.arena;
+package com.likeageek.randomizer.shufflers.gym;
 
-public enum Arenas {
+public enum Gyms {
     VIRIDIAN_GYM,
     VERMILION_GYM,
     CERULEAN_GYM,
