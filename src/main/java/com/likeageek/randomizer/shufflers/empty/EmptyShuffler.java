@@ -12,17 +12,17 @@ public class EmptyShuffler implements IShuffler {
     }
 
     @Override
-    public Map<String, String> shuffle(long seed) {
+    public Map<String, Object> shuffle(long seed) {
         return null;
     }
 
     @Override
-    public void process(Map<String, String> shuffledEntries) {
+    public void process(Map<String, Object> shuffledEntries) {
 
     }
 
     @Override
-    public Map<String, String> getResult() {
+    public Map<String, Object> getResult() {
         return new HashMap<>();
     }
 }

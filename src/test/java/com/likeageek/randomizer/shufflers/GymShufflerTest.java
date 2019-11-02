@@ -1,7 +1,9 @@
 package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
+import com.likeageek.randomizer.shufflers.gym.Gyms;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
+import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,39 +29,45 @@ public class GymShufflerTest {
     }
 
     @Test
-    public void shouldConvertAsmFileForATown() throws URISyntaxException, IOException {
-        Map<String, String> arenas = new HashMap<>();
-        arenas.put("ViridianCity", "CINNABAR_GYM");
-        arenas.put("VermilionCity", "SAFFRON_GYM");
-        arenas.put("CeruleanCity", "CERULEAN_GYM");
-        arenas.put("PewterCity", "VIRIDIAN_GYM");
-        arenas.put("CeladonCity", "VERMILION_GYM");
-        arenas.put("FuchsiaCity", "CELADON_GYM");
-        arenas.put("SaffronCity", "FUCHSIA_GYM");
-        arenas.put("CinnabarIsland", "PEWTER_GYM");
+    public void shouldConvertAsmFileForACity() throws URISyntaxException, IOException {
+        Map<String, Object> cities = new HashMap<>();
+        cities.put("ViridianCity", gym().warpId(4).name(Gyms.valueOf("CINNABAR_GYM")).build());
+        cities.put("VermilionCity", gym().warpId(3).name(Gyms.valueOf("SAFFRON_GYM")).build());
+        cities.put("CeruleanCity", gym().warpId(3).name(Gyms.valueOf("CERULEAN_GYM")).build());
+        cities.put("PewterCity", gym().warpId(2).name(Gyms.valueOf("VIRIDIAN_GYM")).build());
+        cities.put("CeladonCity", gym().warpId(6).name(Gyms.valueOf("VERMILION_GYM")).build());
+        cities.put("FuchsiaCity", gym().warpId(5).name(Gyms.valueOf("CELADON_GYM")).build());
+        cities.put("SaffronCity", gym().warpId(2).name(Gyms.valueOf("FUCHSIA_GYM")).build());
+        cities.put("CinnabarIsland", gym().warpId(1).name(Gyms.valueOf("PEWTER_GYM")).build());
 
-        gymShuffler.process(arenas);
+        gymShuffler.process(cities);
 
-        for (Map.Entry<String, String> entry : gymShuffler.getResult().entrySet()) {
-            String town = entry.getKey();
-            String expectedFileShuffled = new String(readAllBytes(get(getClass().getResource("../" + town + "-shuffled.txt").toURI())));
-            String asmFileShuffled = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + town + ".asm")));
-            assertThat(asmFileShuffled).isEqualTo(expectedFileShuffled);
+        for (Map.Entry<String, Object> entry : cities.entrySet()) {
+            String cityName = entry.getKey();
+            Object gym = entry.getValue();
+            String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../" + cityName + "-shuffled.txt").toURI())));
+            String cityAsmFile = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + cityName + ".asm")));
+            assertThat(cityAsmFile).isEqualTo(expectedCityAsmFile);
+
+            String gymName = ((Gym) gym).getName().getName();
+            String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../" + gymName + "-shuffled.txt").toURI())));
+            String gymAsmFile = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + gymName + ".asm")));
+            assertThat(gymAsmFile).isEqualTo(expectedGymAsmFile);
         }
     }
 
     @Test
-    public void shouldShuffleTownArenas() {
-        Map<String, String> arenas = gymShuffler.shuffle(3297392);
+    public void shouldShuffleGyms() {
+        Map<String, Object> gyms = gymShuffler.shuffle(3297392);
 
-        assertThat(arenas.get("ViridianCity")).isEqualTo("CINNABAR_GYM");
-        assertThat(arenas.get("VermilionCity")).isEqualTo("SAFFRON_GYM");
-        assertThat(arenas.get("CeruleanCity")).isEqualTo("CERULEAN_GYM");
-        assertThat(arenas.get("PewterCity")).isEqualTo("VIRIDIAN_GYM");
-        assertThat(arenas.get("CeladonCity")).isEqualTo("VERMILION_GYM");
-        assertThat(arenas.get("FuchsiaCity")).isEqualTo("CELADON_GYM");
-        assertThat(arenas.get("SaffronCity")).isEqualTo("FUCHSIA_GYM");
-        assertThat(arenas.get("CinnabarIsland")).isEqualTo("PEWTER_GYM");
+        assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(gym().warpId(4).name(CINNABAR_GYM).build());
+        assertThat((gyms.get("VermilionCity"))).isEqualToComparingFieldByField(gym().warpId(3).name(SAFFRON_GYM).build());
+        assertThat((gyms.get("CeruleanCity"))).isEqualToComparingFieldByField(gym().warpId(3).name(CERULEAN_GYM).build());
+        assertThat((gyms.get("PewterCity"))).isEqualToComparingFieldByField(gym().warpId(2).name(VIRIDIAN_GYM).build());
+        assertThat((gyms.get("CeladonCity"))).isEqualToComparingFieldByField(gym().warpId(6).name(VERMILION_GYM).build());
+        assertThat((gyms.get("FuchsiaCity"))).isEqualToComparingFieldByField(gym().warpId(5).name(CELADON_GYM).build());
+        assertThat((gyms.get("SaffronCity"))).isEqualToComparingFieldByField(gym().warpId(2).name(FUCHSIA_GYM).build());
+        assertThat((gyms.get("CinnabarIsland"))).isEqualToComparingFieldByField(gym().warpId(1).name(PEWTER_GYM).build());
     }
 
     static class FakeAsmFileManager implements IFileManager {

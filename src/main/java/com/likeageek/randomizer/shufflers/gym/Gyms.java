@@ -1,12 +1,22 @@
 package com.likeageek.randomizer.shufflers.gym;
 
 public enum Gyms {
-    VIRIDIAN_GYM,
-    VERMILION_GYM,
-    CERULEAN_GYM,
-    PEWTER_GYM,
-    CELADON_GYM,
-    FUCHSIA_GYM,
-    SAFFRON_GYM,
-    CINNABAR_GYM
+    VIRIDIAN_GYM("ViridianGym"),
+    VERMILION_GYM("VermilionGym"),
+    CERULEAN_GYM("CeruleanGym"),
+    PEWTER_GYM("PewterGym"),
+    CELADON_GYM("CeladonGym"),
+    FUCHSIA_GYM("FuchsiaGym"),
+    SAFFRON_GYM("SaffronGym"),
+    CINNABAR_GYM("CinnabarGym");
+
+    private final String name;
+
+    Gyms(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

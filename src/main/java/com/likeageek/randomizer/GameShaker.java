@@ -31,7 +31,7 @@ public class GameShaker {
 
     public void shake() {
         this.shufflers.forEach(shuffler -> {
-            Map<String, String> shuffledArenas = shuffler.shuffle(configuration.getSeed());
+            Map<String, Object> shuffledArenas = shuffler.shuffle(configuration.getSeed());
             shuffler.process(shuffledArenas);
             shuffler.getResult().forEach((city, gym) -> {
                 System.out.println(city + ":" + gym + "\r\n");

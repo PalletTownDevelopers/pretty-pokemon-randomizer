@@ -16,6 +16,11 @@ public final class GymBuilder {
         return this;
     }
 
+    public GymBuilder warpId(int warpId) {
+        gym.setWarpId(warpId);
+        return this;
+    }
+
     public Gym build() {
         return gym;
     }

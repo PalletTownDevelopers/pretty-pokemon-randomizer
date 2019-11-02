@@ -3,9 +3,9 @@ package com.likeageek.randomizer.shufflers;
 import java.util.Map;
 
 public interface IShuffler {
-    Map<String, String> shuffle(long seed);
+    Map<String, Object> shuffle(long seed);
 
-    void process(Map<String, String> shuffledEntries);
+    void process(Map<String, Object> shuffledEntries);
 
-    Map<String, String> getResult();
+    Map<String, Object> getResult();
 }
