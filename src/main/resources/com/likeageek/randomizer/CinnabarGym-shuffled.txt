@@ -3,7 +3,7 @@ CinnabarGym_Object:
 
 	db 2 ; warps
 	warp 16, 17, 4, -1
-	warp 17, 17, 4gitit, -1
+	warp 17, 17, 4, -1
 
 	db 0 ; signs
 

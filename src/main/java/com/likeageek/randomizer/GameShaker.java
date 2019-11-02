@@ -2,6 +2,7 @@ package com.likeageek.randomizer;
 
 import com.likeageek.randomizer.shufflers.IShuffler;
 import com.likeageek.randomizer.shufflers.empty.EmptyShuffler;
+import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class GameShaker {
             Map<String, Object> shuffledArenas = shuffler.shuffle(configuration.getSeed());
             shuffler.process(shuffledArenas);
             shuffler.getResult().forEach((city, gym) -> {
-                System.out.println(city + ":" + gym + "\r\n");
+                System.out.println(city + ":" + ((Gym) gym).getName() + ":warpId:" + ((Gym) gym).getWarpId() + "\r\n");
             });
         });
     }
