@@ -14,18 +14,22 @@ import static java.util.Arrays.asList;
 
 public class GameShaker {
     private final IFileManager asmFileManager;
+    private final IFileParser asmFileParser;
     private Configuration configuration;
     private List<IShuffler> shufflers;
 
-    public GameShaker(Configuration configuration, IFileManager asmFileManager) {
+    public GameShaker(Configuration configuration,
+                      IFileManager asmFileManager,
+                      IFileParser asmFileParser) {
         this.configuration = configuration;
         this.asmFileManager = asmFileManager;
+        this.asmFileParser = asmFileParser;
     }
 
     public void init() throws IOException {
         asmFileManager.copyGame();
         this.shufflers = new ArrayList<>(asList(
-                new GymShuffler(asmFileManager),
+                new GymShuffler(asmFileManager, asmFileParser),
                 new EmptyShuffler()
         ));
     }

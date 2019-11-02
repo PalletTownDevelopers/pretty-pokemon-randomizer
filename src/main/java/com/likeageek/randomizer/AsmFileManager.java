@@ -34,4 +34,5 @@ public class AsmFileManager implements IFileManager {
     public void copyGame() throws IOException {
         copyDirectory(new File(pokemonPath), new File(outputPath));
     }
+
 }

@@ -1,6 +1,7 @@
 package com.likeageek.randomizer.shufflers.gym;
 
 import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.IFileParser;
 import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.IShuffler;
 
@@ -21,54 +22,16 @@ public class GymShuffler implements IShuffler {
     private static final String MAP_OBJECTS_FILEPATH = "/data/mapObjects/";
     private Map<String, Object> gymsRandomized = new HashMap<>();
     private IFileManager asmFileManager;
+    private IFileParser asmFileParser;
     private RandomEngine randomEngine;
     private List<City> cities;
 
-    public GymShuffler(IFileManager asmFileManager) {
+    public GymShuffler(IFileManager asmFileManager, IFileParser asmFileParser) {
         this.asmFileManager = asmFileManager;
+        this.asmFileParser = asmFileParser;
         cities = this.buildCities();
         randomEngine = new RandomEngine();
         System.out.println("gym shuffler");
-    }
-
-    @Override
-    public void process(Map<String, Object> gyms) {
-        for (Map.Entry<String, Object> entry : gyms.entrySet()) {
-            String city = entry.getKey();
-            String gymToReplace = ((Gym) (gyms.get(city))).getName().toString();
-            int warpId = ((Gym) (gyms.get(city))).getWarpId();
-            buildCityAsmFile(city, gymToReplace);
-            buildGymAsmFile(gymToReplace, warpId);
-        }
-    }
-
-    private void buildCityAsmFile(String city, String gymToReplace) {
-        try {
-            String[] lines = readAsmFile(city);
-            String fileCityShuffled = buildAsmFileCity(city, gymToReplace, lines);
-            String filePath = MAP_OBJECTS_FILEPATH + city;
-            asmFileManager.write(filePath, fileCityShuffled);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildGymAsmFile(String gym, int warpId) {
-        try {
-            String gymName = Gyms.valueOf(gym).getName();
-            String[] lines = readAsmFile(gymName);
-            String fileGymShuffled = buildAsmFileGym(gymName, warpId, lines);
-            String filePath = MAP_OBJECTS_FILEPATH + gymName;
-            asmFileManager.write(filePath, fileGymShuffled);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String buildAsmFileGym(String gym, int warpId, String[] lines) {
-        lines[3] = replaceWarpId(lines[3], warpId);
-        lines[4] = replaceWarpId(lines[4], warpId);
-        return join("\n\t", lines);
     }
 
     @Override
@@ -86,8 +49,49 @@ public class GymShuffler implements IShuffler {
     }
 
     @Override
+    public void process(Map<String, Object> gyms) {
+        for (Map.Entry<String, Object> entry : gyms.entrySet()) {
+            String city = entry.getKey();
+            Gym gym = (Gym) (gyms.get(city));
+            String gymName = gym.getName().toString();
+            int warpId = gym.getWarpId();
+            buildCityAsmFile(city, gymName);
+            buildGymAsmFile(gymName, warpId);
+        }
+    }
+
+    @Override
     public Map<String, Object> getResult() {
         return this.gymsRandomized;
+    }
+
+    private void buildCityAsmFile(String city, String gymToReplace) {
+        try {
+            String[] lines = readAsmFile(city);
+            String fileCityShuffled = buildAsmFileCity(city, gymToReplace, lines);
+            String filePath = MAP_OBJECTS_FILEPATH + city;
+            asmFileManager.write(filePath, fileCityShuffled);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void buildGymAsmFile(String gym, int warpId) {
+        try {
+            String gymName = Gyms.valueOf(gym).getName();
+            String[] lines = readAsmFile(gymName);
+            String fileGymShuffled = buildAsmFileGym(warpId, lines);
+            String filePath = MAP_OBJECTS_FILEPATH + gymName;
+            asmFileManager.write(filePath, fileGymShuffled);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String buildAsmFileGym(int warpId, String[] lines) {
+        lines[3] = asmFileParser.editLine(lines[3], Integer.toString(warpId), 3);
+        lines[4] = asmFileParser.editLine(lines[4], Integer.toString(warpId), 3);
+        return join("\n\t", lines);
     }
 
     private List<String> getCitiesRandomized(List<City> cities, long seed) {
@@ -115,58 +119,46 @@ public class GymShuffler implements IShuffler {
     private String buildAsmFileCity(String cityName, String gymName, String[] lines) {
         switch (cityName) {
             case "ViridianCity": {
-                String viridianCity = replaceGymName(lines[7], gymName);
+                String viridianCity = asmFileParser.editLine(lines[7], gymName,4);
                 lines[7] = viridianCity + "\n";
                 break;
             }
             case "CeladonCity": {
-                String CeladonCity = replaceGymName(lines[9], gymName);
+                String CeladonCity = asmFileParser.editLine(lines[9], gymName,4);
                 lines[9] = CeladonCity;
                 break;
             }
             case "VermilionCity": {
-                String VermilionCity = replaceGymName(lines[6], gymName);
+                String VermilionCity = asmFileParser.editLine(lines[6], gymName,4);
                 lines[6] = VermilionCity;
                 break;
             }
             case "CeruleanCity": {
-                String CeruleanCity = replaceGymName(lines[6], gymName);
+                String CeruleanCity = asmFileParser.editLine(lines[6], gymName,4);
                 lines[6] = CeruleanCity;
                 break;
             }
             case "PewterCity": {
-                String PewterCity = replaceGymName(lines[5], gymName);
+                String PewterCity = asmFileParser.editLine(lines[5], gymName,4);
                 lines[5] = PewterCity;
                 break;
             }
             case "FuchsiaCity": {
-                String FuchsiaCity = replaceGymName(lines[8], gymName);
+                String FuchsiaCity = asmFileParser.editLine(lines[8], gymName,4);
                 lines[8] = FuchsiaCity;
                 break;
             }
             case "SaffronCity": {
-                String SaffronCity = replaceGymName(lines[5], gymName);
+                String SaffronCity = asmFileParser.editLine(lines[5], gymName,4);
                 lines[5] = SaffronCity;
                 break;
             }
             case "CinnabarIsland": {
-                String cinnabarIsland = replaceGymName(lines[4], gymName);
+                String cinnabarIsland = asmFileParser.editLine(lines[4], gymName,4);
                 lines[4] = cinnabarIsland;
                 break;
             }
         }
         return join("\n\t", lines);
-    }
-
-    private String replaceGymName(String line, String arena) {
-        String[] gymLineElements = line.split(",");
-        gymLineElements[3] = " " + arena;
-        return join(",", gymLineElements);
-    }
-
-    private String replaceWarpId(String line, int warpId) {
-        String[] gymLineElements = line.split(",");
-        gymLineElements[2] = " ".concat(Integer.toString(warpId));
-        return join(",", gymLineElements);
     }
 }

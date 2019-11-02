@@ -25,7 +25,7 @@ public class GameShakerTest {
                 .pokemonDirectory("/home/likeageek/Projects/randomizer-output/")
                 .outputDirectory("/home/likeageek/Projects/randomizer-output/")
                 .build();
-        gameShaker = new GameShaker(configuration, new FakeAsmFileManager());
+        gameShaker = new GameShaker(configuration, new FakeAsmFileManager(), new AsmFileParser());
         gameShaker.init();
     }
 

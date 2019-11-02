@@ -23,7 +23,8 @@ public class App {
                         .outputDirectory(cmd.getOptionValue("output_dir"))
                         .build();
                 AsmFileManager asmFileManager = new AsmFileManager(configuration.getPokemonDirectory(), configuration.getOutputDirectory());
-                GameShaker gameShaker = new GameShaker(configuration, asmFileManager);
+                AsmFileParser asmFileParser = new AsmFileParser();
+                GameShaker gameShaker = new GameShaker(configuration, asmFileManager, asmFileParser);
                 gameShaker.init();
                 gameShaker.shake();
             }

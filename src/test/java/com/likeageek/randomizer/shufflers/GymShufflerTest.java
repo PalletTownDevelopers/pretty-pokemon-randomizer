@@ -1,5 +1,6 @@
 package com.likeageek.randomizer.shufflers;
 
+import com.likeageek.randomizer.AsmFileParser;
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
@@ -25,11 +26,11 @@ public class GymShufflerTest {
 
     @BeforeEach
     public void init() {
-        gymShuffler = new GymShuffler(new FakeAsmFileManager());
+        gymShuffler = new GymShuffler(new FakeAsmFileManager(), new AsmFileParser());
     }
 
     @Test
-    public void shouldConvertAsmFileForACity() throws URISyntaxException, IOException {
+    public void shouldProcessGymsWithWarpID() throws URISyntaxException, IOException {
         Map<String, Object> cities = new HashMap<>();
         cities.put("ViridianCity", gym().warpId(4).name(Gyms.valueOf("CINNABAR_GYM")).build());
         cities.put("VermilionCity", gym().warpId(3).name(Gyms.valueOf("SAFFRON_GYM")).build());
