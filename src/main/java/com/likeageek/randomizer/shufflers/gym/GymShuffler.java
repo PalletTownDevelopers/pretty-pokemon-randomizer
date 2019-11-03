@@ -29,8 +29,8 @@ public class GymShuffler implements IShuffler {
     public GymShuffler(IFileManager asmFileManager, IFileParser asmFileParser) {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
-        cities = this.buildCities();
-        randomEngine = new RandomEngine();
+        this.cities = this.buildCities();
+        this.randomEngine = new RandomEngine();
         System.out.println("gym shuffler");
     }
 
@@ -68,9 +68,8 @@ public class GymShuffler implements IShuffler {
     private void buildCityAsmFile(String city, String gymToReplace) {
         try {
             String[] lines = readAsmFile(city);
-            String fileCityShuffled = buildAsmFileCity(city, gymToReplace, lines);
-            String filePath = MAP_OBJECTS_FILEPATH + city;
-            asmFileManager.write(filePath, fileCityShuffled);
+            String cityFileContent = buildAsmFileCity(city, gymToReplace, lines);
+            this.asmFileManager.write(MAP_OBJECTS_FILEPATH + city, cityFileContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,24 +79,23 @@ public class GymShuffler implements IShuffler {
         try {
             String gymName = Gyms.valueOf(gym).getName();
             String[] lines = readAsmFile(gymName);
-            String fileGymShuffled = buildAsmFileGym(warpId, lines);
-            String filePath = MAP_OBJECTS_FILEPATH + gymName;
-            asmFileManager.write(filePath, fileGymShuffled);
+            String gymFileContent = buildAsmFileGym(warpId, lines);
+            this.asmFileManager.write(MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private String buildAsmFileGym(int warpId, String[] lines) {
-        lines[3] = asmFileParser.editLine(lines[3], Integer.toString(warpId), 3);
-        lines[4] = asmFileParser.editLine(lines[4], Integer.toString(warpId), 3);
+        lines[3] = this.asmFileParser.editLine(lines[3], Integer.toString(warpId), 3);
+        lines[4] = this.asmFileParser.editLine(lines[4], Integer.toString(warpId), 3);
         return join("\n\t", lines);
     }
 
     private List<String> getCitiesRandomized(List<City> cities, long seed) {
         List<String> citiesRandomized = new ArrayList<>();
         cities.forEach(city -> citiesRandomized.add(city.getGym().getName().toString()));
-        return randomEngine.random(citiesRandomized, seed);
+        return this.randomEngine.random(citiesRandomized, seed);
     }
 
     private List<City> buildCities() {
@@ -113,52 +111,30 @@ public class GymShuffler implements IShuffler {
     }
 
     private String[] readAsmFile(String fileName) throws IOException {
-        return asmFileManager.read(MAP_OBJECTS_FILEPATH + fileName).split("\n\t");
+        return this.asmFileManager.read(MAP_OBJECTS_FILEPATH + fileName).split("\n\t");
     }
 
     private String buildAsmFileCity(String cityName, String gymName, String[] lines) {
-        switch (cityName) {
-            case "ViridianCity": {
-                String viridianCity = asmFileParser.editLine(lines[7], gymName,4);
-                lines[7] = viridianCity + "\n";
-                break;
-            }
-            case "CeladonCity": {
-                String CeladonCity = asmFileParser.editLine(lines[9], gymName,4);
-                lines[9] = CeladonCity;
-                break;
-            }
-            case "VermilionCity": {
-                String VermilionCity = asmFileParser.editLine(lines[6], gymName,4);
-                lines[6] = VermilionCity;
-                break;
-            }
-            case "CeruleanCity": {
-                String CeruleanCity = asmFileParser.editLine(lines[6], gymName,4);
-                lines[6] = CeruleanCity;
-                break;
-            }
-            case "PewterCity": {
-                String PewterCity = asmFileParser.editLine(lines[5], gymName,4);
-                lines[5] = PewterCity;
-                break;
-            }
-            case "FuchsiaCity": {
-                String FuchsiaCity = asmFileParser.editLine(lines[8], gymName,4);
-                lines[8] = FuchsiaCity;
-                break;
-            }
-            case "SaffronCity": {
-                String SaffronCity = asmFileParser.editLine(lines[5], gymName,4);
-                lines[5] = SaffronCity;
-                break;
-            }
-            case "CinnabarIsland": {
-                String cinnabarIsland = asmFileParser.editLine(lines[4], gymName,4);
-                lines[4] = cinnabarIsland;
-                break;
-            }
-        }
+        Integer lineNumber = this.cityLineNumber.get(cityName);
+        lines[lineNumber] = this.asmFileParser.editLine(lines[lineNumber], gymName, 4);
+        addNewlineToViridianCity(cityName, lines, lineNumber);
         return join("\n\t", lines);
     }
+
+    private void addNewlineToViridianCity(String cityName, String[] lines, Integer lineNumber) {
+        if ("ViridianCity".equals(cityName)) {
+            lines[lineNumber] = lines[lineNumber].concat("\n");
+        }
+    }
+
+    private Map<String, Integer> cityLineNumber = new HashMap<String, Integer>() {{
+        put("ViridianCity", 7);
+        put("CeladonCity", 9);
+        put("VermilionCity", 6);
+        put("CeruleanCity", 6);
+        put("PewterCity", 5);
+        put("SaffronCity", 5);
+        put("FuchsiaCity", 8);
+        put("CinnabarIsland", 4);
+    }};
 }
