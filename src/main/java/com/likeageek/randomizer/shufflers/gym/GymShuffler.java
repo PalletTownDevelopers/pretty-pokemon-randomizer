@@ -6,7 +6,6 @@ import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import static com.likeageek.randomizer.shufflers.gym.Cities.*;
 import static com.likeageek.randomizer.shufflers.gym.CityBuilder.city;
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
 import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
+import static com.likeageek.randomizer.shufflers.gym.Trainers.*;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
@@ -36,14 +36,25 @@ public class GymShuffler implements IShuffler {
 
     @Override
     public Map<String, Object> shuffle(long seed) {
-        List<String> citiesRandomized = getCitiesRandomized(this.cities, seed);
-        for (int index = 0; index < this.cities.size(); index++) {
-            String cityName = this.cities.get(index).getName().toString();
-            int cityWarpId = this.cities.get(index).getGym().getWarpId();
+        List<City> citiesRandomized = this.randomEngine.random(this.cities, seed);
 
-            String gymName = citiesRandomized.get(index);
-            Gym gym = gym().name(Gyms.valueOf(gymName)).warpId(cityWarpId).build();
-            this.gymsRandomized.put(cityName, gym);
+        for (int index = 0; index < this.cities.size(); index++) {
+            City city = this.cities.get(index);
+            String cityName = city.getName().toString();
+            int cityWarpId = city.getGym().getWarpId();
+
+            Gym gym = citiesRandomized.get(index).getGym();
+            String gymName = gym.getName().toString();
+            Trainers trainer = gym.getTrainer();
+            int[] pokemonLevelRange = gym.getPokemonRangeLevel();
+
+            Gym newGym = gym()
+                    .name(Gyms.valueOf(gymName))
+                    .warpId(cityWarpId)
+                    .trainer(trainer)
+                    .pokemonRangeLevel(pokemonLevelRange)
+                    .build();
+            this.gymsRandomized.put(cityName, newGym);
         }
         return this.gymsRandomized;
     }
@@ -92,22 +103,25 @@ public class GymShuffler implements IShuffler {
         return join("\n\t", lines);
     }
 
-    private List<String> getCitiesRandomized(List<City> cities, long seed) {
-        List<String> citiesRandomized = new ArrayList<>();
-        cities.forEach(city -> citiesRandomized.add(city.getGym().getName().toString()));
-        return this.randomEngine.random(citiesRandomized, seed);
-    }
-
     private List<City> buildCities() {
+        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).trainer(Brock).pokemonRangeLevel(new int[]{12, 14}).build();
+        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).trainer(Misty).pokemonRangeLevel(new int[]{18, 21}).build();
+        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).trainer(Misty).pokemonRangeLevel(new int[]{18, 24}).build();
+        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).trainer(Erika).pokemonRangeLevel(new int[]{24, 29}).build();
+        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).trainer(Koga).pokemonRangeLevel(new int[]{37, 43}).build();
+        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).trainer(Sabrina).pokemonRangeLevel(new int[]{37, 43}).build();
+        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).trainer(Blaine).pokemonRangeLevel(new int[]{40, 47}).build();
+        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).trainer(Giovanni).pokemonRangeLevel(new int[]{42, 50}).build();
+
         return asList(
-                city().name(ViridianCity).arena(gym().warpId(4).name(VIRIDIAN_GYM).build()).build(),
-                city().name(VermilionCity).arena(gym().warpId(3).name(VERMILION_GYM).build()).build(),
-                city().name(CeruleanCity).arena(gym().warpId(3).name(CERULEAN_GYM).build()).build(),
-                city().name(PewterCity).arena(gym().warpId(2).name(PEWTER_GYM).build()).build(),
-                city().name(CeladonCity).arena(gym().warpId(6).name(CELADON_GYM).build()).build(),
-                city().name(FuchsiaCity).arena(gym().warpId(5).name(FUCHSIA_GYM).build()).build(),
-                city().name(SaffronCity).arena(gym().warpId(2).name(SAFFRON_GYM).build()).build(),
-                city().name(CinnabarIsland).arena(gym().warpId(1).name(CINNABAR_GYM).build()).build());
+                city().name(PewterCity).gym(pewterGym).build(),
+                city().name(CeruleanCity).gym(ceruleanGym).build(),
+                city().name(VermilionCity).gym(vermilionGym).build(),
+                city().name(CeladonCity).gym(celadonGym).build(),
+                city().name(FuchsiaCity).gym(fuchsiaGym).build(),
+                city().name(SaffronCity).gym(saffronGym).build(),
+                city().name(CinnabarIsland).gym(cinnarbarGym).build(),
+                city().name(ViridianCity).gym(viridianGym).build());
     }
 
     private String[] readAsmFile(String fileName) throws IOException {

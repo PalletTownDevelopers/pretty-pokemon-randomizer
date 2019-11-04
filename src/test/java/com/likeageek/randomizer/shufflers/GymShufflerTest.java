@@ -16,7 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
-import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
+import static com.likeageek.randomizer.shufflers.gym.Gyms.CELADON_GYM;
+import static com.likeageek.randomizer.shufflers.gym.Trainers.Erika;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,14 +62,8 @@ public class GymShufflerTest {
     public void shouldShuffleGyms() {
         Map<String, Object> gyms = gymShuffler.shuffle(3297392);
 
-        assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(gym().warpId(4).name(CINNABAR_GYM).build());
-        assertThat((gyms.get("VermilionCity"))).isEqualToComparingFieldByField(gym().warpId(3).name(SAFFRON_GYM).build());
-        assertThat((gyms.get("CeruleanCity"))).isEqualToComparingFieldByField(gym().warpId(3).name(CERULEAN_GYM).build());
-        assertThat((gyms.get("PewterCity"))).isEqualToComparingFieldByField(gym().warpId(2).name(VIRIDIAN_GYM).build());
-        assertThat((gyms.get("CeladonCity"))).isEqualToComparingFieldByField(gym().warpId(6).name(VERMILION_GYM).build());
-        assertThat((gyms.get("FuchsiaCity"))).isEqualToComparingFieldByField(gym().warpId(5).name(CELADON_GYM).build());
-        assertThat((gyms.get("SaffronCity"))).isEqualToComparingFieldByField(gym().warpId(2).name(FUCHSIA_GYM).build());
-        assertThat((gyms.get("CinnabarIsland"))).isEqualToComparingFieldByField(gym().warpId(1).name(PEWTER_GYM).build());
+        Gym newViridianGym = gym().warpId(4).trainer(Erika).pokemonRangeLevel(new int[]{24, 29}).name(CELADON_GYM).build();
+        assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
     }
 
     static class FakeAsmFileManager implements IFileManager {

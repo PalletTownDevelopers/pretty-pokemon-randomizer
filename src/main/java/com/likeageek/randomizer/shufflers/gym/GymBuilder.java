@@ -21,6 +21,16 @@ public final class GymBuilder {
         return this;
     }
 
+    public GymBuilder trainer(Trainers trainer) {
+        gym.setTrainer(trainer);
+        return this;
+    }
+
+    public GymBuilder pokemonRangeLevel(int[] pokemonRangeLevel) {
+        gym.setPokemonRangeLevel(pokemonRangeLevel);
+        return this;
+    }
+
     public Gym build() {
         return gym;
     }

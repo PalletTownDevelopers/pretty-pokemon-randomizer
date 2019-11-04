@@ -16,7 +16,7 @@ public final class CityBuilder {
         return this;
     }
 
-    public CityBuilder arena(Gym gym) {
+    public CityBuilder gym(Gym gym) {
         city.setGym(gym);
         return this;
     }
