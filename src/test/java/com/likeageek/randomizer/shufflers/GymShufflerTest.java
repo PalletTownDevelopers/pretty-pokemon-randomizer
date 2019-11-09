@@ -2,9 +2,10 @@ package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.AsmFileParser;
 import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
-import com.likeageek.randomizer.shufflers.gym.Gyms;
+import com.likeageek.randomizer.shufflers.gym.Trainers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,23 +25,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GymShufflerTest {
     private GymShuffler gymShuffler;
+    private String outputPath = "/home/likeageek/Projects/randomizer-output/data/";
 
     @BeforeEach
     public void init() {
-        gymShuffler = new GymShuffler(new FakeAsmFileManager(), new AsmFileParser());
+        RandomEngine randomEngine = new RandomEngine(3297392);
+        randomEngine.setTest(true);
+        gymShuffler = new GymShuffler(new FakeAsmFileManager(), new AsmFileParser(), randomEngine);
     }
 
     @Test
     public void shouldProcessGymsWithWarpID() throws URISyntaxException, IOException {
+        Integer[] viridianRangeLevel = {42, 50};
+        int viridianWarpId = 4;
+        Trainers celadonTrainer = Erika;
+
         Map<String, Object> cities = new HashMap<>();
-        cities.put("ViridianCity", gym().warpId(4).name(Gyms.valueOf("CINNABAR_GYM")).build());
-        cities.put("VermilionCity", gym().warpId(3).name(Gyms.valueOf("SAFFRON_GYM")).build());
-        cities.put("CeruleanCity", gym().warpId(3).name(Gyms.valueOf("CERULEAN_GYM")).build());
-        cities.put("PewterCity", gym().warpId(2).name(Gyms.valueOf("VIRIDIAN_GYM")).build());
-        cities.put("CeladonCity", gym().warpId(6).name(Gyms.valueOf("VERMILION_GYM")).build());
-        cities.put("FuchsiaCity", gym().warpId(5).name(Gyms.valueOf("CELADON_GYM")).build());
-        cities.put("SaffronCity", gym().warpId(2).name(Gyms.valueOf("FUCHSIA_GYM")).build());
-        cities.put("CinnabarIsland", gym().warpId(1).name(Gyms.valueOf("PEWTER_GYM")).build());
+        cities.put("ViridianCity", gym().warpId(viridianWarpId).trainer(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build());
 
         gymShuffler.process(cities);
 
@@ -48,21 +49,29 @@ public class GymShufflerTest {
             String cityName = entry.getKey();
             Object gym = entry.getValue();
             String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../" + cityName + "-shuffled.txt").toURI())));
-            String cityAsmFile = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + cityName + ".asm")));
+            String cityAsmFile = new String(readAllBytes(get(outputPath + "mapObjects/" + cityName + ".asm")));
             assertThat(cityAsmFile).isEqualTo(expectedCityAsmFile);
 
             String gymName = ((Gym) gym).getName().getName();
             String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../" + gymName + "-shuffled.txt").toURI())));
-            String gymAsmFile = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-output/data/mapObjects/" + gymName + ".asm")));
+            String gymAsmFile = new String(readAllBytes(get(outputPath + "mapObjects/" + gymName + ".asm")));
             assertThat(gymAsmFile).isEqualTo(expectedGymAsmFile);
         }
+
+        String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../trainer_parties-shuffled.txt").toURI())));
+        String trainerPartiesAsmFile = new String(readAllBytes(get(outputPath + "/trainer_parties.asm")));
+        assertThat(trainerPartiesAsmFile).isEqualTo(expectedTrainerPartiesAsmFile);
     }
 
     @Test
     public void shouldShuffleGyms() {
-        Map<String, Object> gyms = gymShuffler.shuffle(3297392);
+        Integer[] viridianRangeLevel = {42, 50};
+        int viridianWarpId = 4;
+        Trainers celadonTrainer = Erika;
 
-        Gym newViridianGym = gym().warpId(4).trainer(Erika).pokemonRangeLevel(new int[]{24, 29}).name(CELADON_GYM).build();
+        Map<String, Object> gyms = gymShuffler.shuffle();
+
+        Gym newViridianGym = gym().warpId(viridianWarpId).trainer(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
         assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
     }
 

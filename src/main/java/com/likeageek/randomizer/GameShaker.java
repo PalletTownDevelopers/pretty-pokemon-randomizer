@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 public class GameShaker {
     private final IFileManager asmFileManager;
     private final IFileParser asmFileParser;
+    private final IRandomEngine randomEngine;
     private Configuration configuration;
     private List<IShuffler> shufflers;
 
@@ -24,19 +25,20 @@ public class GameShaker {
         this.configuration = configuration;
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
+        this.randomEngine = new RandomEngine(configuration.getSeed());
     }
 
     public void init() throws IOException {
         asmFileManager.copyGame();
         this.shufflers = new ArrayList<>(asList(
-                new GymShuffler(asmFileManager, asmFileParser),
+                new GymShuffler(asmFileManager, asmFileParser, randomEngine),
                 new EmptyShuffler()
         ));
     }
 
     public void shake() {
         this.shufflers.forEach(shuffler -> {
-            Map<String, Object> shuffledArenas = shuffler.shuffle(configuration.getSeed());
+            Map<String, Object> shuffledArenas = shuffler.shuffle();
             shuffler.process(shuffledArenas);
             shuffler.getResult().forEach((city, gym) -> {
                 System.out.println(city + ":" + ((Gym) gym).getName() + ":warpId:" + ((Gym) gym).getWarpId() + "\r\n");

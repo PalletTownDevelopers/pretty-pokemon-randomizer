@@ -2,13 +2,12 @@ package com.likeageek.randomizer.shufflers.gym;
 
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
-import com.likeageek.randomizer.RandomEngine;
+import com.likeageek.randomizer.IRandomEngine;
 import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.likeageek.randomizer.shufflers.gym.Cities.*;
 import static com.likeageek.randomizer.shufflers.gym.CityBuilder.city;
@@ -19,34 +18,36 @@ import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
 public class GymShuffler implements IShuffler {
-    private static final String MAP_OBJECTS_FILEPATH = "/data/mapObjects/";
+    private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
+    private static final String DATA_FILEPATH = "/data/";
     private Map<String, Object> gymsRandomized = new HashMap<>();
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
-    private RandomEngine randomEngine;
+    private IRandomEngine randomEngine;
     private List<City> cities;
 
-    public GymShuffler(IFileManager asmFileManager, IFileParser asmFileParser) {
+    public GymShuffler(IFileManager asmFileManager, IFileParser asmFileParser, IRandomEngine randomEngine) {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
+        this.randomEngine = randomEngine;
         this.cities = this.buildCities();
-        this.randomEngine = new RandomEngine();
         System.out.println("gym shuffler");
     }
 
     @Override
-    public Map<String, Object> shuffle(long seed) {
-        List<City> citiesRandomized = this.randomEngine.random(this.cities, seed);
+    public Map<String, Object> shuffle() {
+        List<Object> citiesRandomized = this.randomEngine.random(new ArrayList<>(this.cities));
 
         for (int index = 0; index < this.cities.size(); index++) {
             City city = this.cities.get(index);
             String cityName = city.getName().toString();
             int cityWarpId = city.getGym().getWarpId();
+            Integer[] pokemonLevelRange = city.getGym().getPokemonRangeLevel();
 
-            Gym gym = citiesRandomized.get(index).getGym();
+            City cityRandom = (City) citiesRandomized.get(index);
+            Gym gym = cityRandom.getGym();
             String gymName = gym.getName().toString();
             Trainers trainer = gym.getTrainer();
-            int[] pokemonLevelRange = gym.getPokemonRangeLevel();
 
             Gym newGym = gym()
                     .name(Gyms.valueOf(gymName))
@@ -66,8 +67,10 @@ public class GymShuffler implements IShuffler {
             Gym gym = (Gym) (gyms.get(city));
             String gymName = gym.getName().toString();
             int warpId = gym.getWarpId();
+
             buildCityAsmFile(city, gymName);
             buildGymAsmFile(gymName, warpId);
+            buildTrainerPartiesAsmFile(gym.getTrainer(), gym.getPokemonRangeLevel());
         }
     }
 
@@ -78,20 +81,48 @@ public class GymShuffler implements IShuffler {
 
     private void buildCityAsmFile(String city, String gymToReplace) {
         try {
-            String[] lines = readAsmFile(city);
+            String[] lines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city);
             String cityFileContent = buildAsmFileCity(city, gymToReplace, lines);
-            this.asmFileManager.write(MAP_OBJECTS_FILEPATH + city, cityFileContent);
+            this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city, cityFileContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private void buildTrainerPartiesAsmFile(Trainers trainer, Integer[] pokemonRangeLevel) {
+        try {
+            String filePath = DATA_FILEPATH + "trainer_parties";
+            String[] lines = readAsmFile(filePath);
+            String cityFileContent = buildAsmTrainerParties(trainer, pokemonRangeLevel, lines);
+            this.asmFileManager.write(filePath, cityFileContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String buildAsmTrainerParties(Trainers trainer, Integer[] pokemonRangeLevel, String[] lines) {
+        List<String> linesList = asList(lines);
+        OptionalInt index = IntStream.range(0, linesList.size())
+                .filter(i -> linesList.get(i).contains(trainer.name() + "Data:"))
+                .findFirst();
+
+        int oppFromCeladonGymFile = 1;
+        int indexOfTrainerErika = index.getAsInt() + oppFromCeladonGymFile;
+
+        String[] split = lines[indexOfTrainerErika].split(",");
+        for (int i = 2; i < split.length; i += 2) {
+            Object o1 = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
+            lines[indexOfTrainerErika] = this.asmFileParser.editLine(lines[indexOfTrainerErika], String.valueOf(o1), i);
+        }
+        return join("\n\t", lines);
+    }
+
     private void buildGymAsmFile(String gym, int warpId) {
         try {
             String gymName = Gyms.valueOf(gym).getName();
-            String[] lines = readAsmFile(gymName);
+            String[] lines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
             String gymFileContent = buildAsmFileGym(warpId, lines);
-            this.asmFileManager.write(MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
+            this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,14 +135,14 @@ public class GymShuffler implements IShuffler {
     }
 
     private List<City> buildCities() {
-        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).trainer(Brock).pokemonRangeLevel(new int[]{12, 14}).build();
-        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).trainer(Misty).pokemonRangeLevel(new int[]{18, 21}).build();
-        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).trainer(Misty).pokemonRangeLevel(new int[]{18, 24}).build();
-        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).trainer(Erika).pokemonRangeLevel(new int[]{24, 29}).build();
-        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).trainer(Koga).pokemonRangeLevel(new int[]{37, 43}).build();
-        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).trainer(Sabrina).pokemonRangeLevel(new int[]{37, 43}).build();
-        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).trainer(Blaine).pokemonRangeLevel(new int[]{40, 47}).build();
-        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).trainer(Giovanni).pokemonRangeLevel(new int[]{42, 50}).build();
+        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).trainer(Brock).pokemonRangeLevel(new Integer[]{12, 14}).build();
+        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).trainer(Misty).pokemonRangeLevel(new Integer[]{18, 21}).build();
+        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).trainer(LtSurge).pokemonRangeLevel(new Integer[]{18, 24}).build();
+        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).trainer(Erika).pokemonRangeLevel(new Integer[]{24, 29}).build();
+        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).trainer(Koga).pokemonRangeLevel(new Integer[]{37, 43}).build();
+        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).trainer(Sabrina).pokemonRangeLevel(new Integer[]{37, 43}).build();
+        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).trainer(Blaine).pokemonRangeLevel(new Integer[]{40, 47}).build();
+        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).trainer(Giovanni).pokemonRangeLevel(new Integer[]{42, 50}).build();
 
         return asList(
                 city().name(PewterCity).gym(pewterGym).build(),
@@ -125,7 +156,7 @@ public class GymShuffler implements IShuffler {
     }
 
     private String[] readAsmFile(String fileName) throws IOException {
-        return this.asmFileManager.read(MAP_OBJECTS_FILEPATH + fileName).split("\n\t");
+        return this.asmFileManager.read(fileName).split("\n\t");
     }
 
     private String buildAsmFileCity(String cityName, String gymName, String[] lines) {

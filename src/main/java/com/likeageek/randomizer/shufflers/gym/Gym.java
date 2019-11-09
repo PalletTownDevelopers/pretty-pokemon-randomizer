@@ -4,7 +4,7 @@ public class Gym {
     private Gyms name;
     private int warpId;
     private Trainers trainer;
-    private int[] pokemonRangeLevel;
+    private Integer[] pokemonRangeLevel;
 
     public Gyms getName() {
         return name;
@@ -30,11 +30,11 @@ public class Gym {
         this.trainer = trainer;
     };
 
-    public int[] getPokemonRangeLevel() {
+    public Integer[] getPokemonRangeLevel() {
         return pokemonRangeLevel;
     }
 
-    public void setPokemonRangeLevel(int[] pokemonRangeLevel) {
+    public void setPokemonRangeLevel(Integer[] pokemonRangeLevel) {
         this.pokemonRangeLevel = pokemonRangeLevel;
     }
 }

@@ -2,8 +2,8 @@ CeladonGym_Object:
 	db $3 ; border block
 
 	db 2 ; warps
-	warp 4, 17, 6, -1
-	warp 5, 17, 6, -1
+	warp 4, 17, 4, -1
+	warp 5, 17, 4, -1
 
 	db 0 ; signs
 
