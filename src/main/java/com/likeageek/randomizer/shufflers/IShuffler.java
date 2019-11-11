@@ -6,6 +6,4 @@ public interface IShuffler {
     Map<String, Object> shuffle();
 
     void process(Map<String, Object> shuffledEntries);
-
-    Map<String, Object> getResult();
 }

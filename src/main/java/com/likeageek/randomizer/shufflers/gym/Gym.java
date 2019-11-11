@@ -1,5 +1,7 @@
 package com.likeageek.randomizer.shufflers.gym;
 
+import java.util.Arrays;
+
 public class Gym {
     private Gyms name;
     private int warpId;
@@ -18,23 +20,33 @@ public class Gym {
         return warpId;
     }
 
-    public void setWarpId(int warpId) {
+    void setWarpId(int warpId) {
         this.warpId = warpId;
     }
 
-    public Trainers getTrainer() {
+    Trainers getTrainer() {
         return trainer;
     }
 
-    public void setTrainer(Trainers trainer) {
+    void setTrainer(Trainers trainer) {
         this.trainer = trainer;
-    };
+    }
 
-    public Integer[] getPokemonRangeLevel() {
+    Integer[] getPokemonRangeLevel() {
         return pokemonRangeLevel;
     }
 
-    public void setPokemonRangeLevel(Integer[] pokemonRangeLevel) {
+    void setPokemonRangeLevel(Integer[] pokemonRangeLevel) {
         this.pokemonRangeLevel = pokemonRangeLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Gym{" +
+                "name=" + name +
+                ", warpId=" + warpId +
+                ", trainer=" + trainer +
+                ", pokemonRangeLevel=" + Arrays.toString(pokemonRangeLevel) +
+                '}';
     }
 }

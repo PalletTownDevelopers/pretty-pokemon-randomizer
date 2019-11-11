@@ -13,16 +13,10 @@ public class EmptyShuffler implements IShuffler {
 
     @Override
     public Map<String, Object> shuffle() {
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public void process(Map<String, Object> shuffledEntries) {
-
-    }
-
-    @Override
-    public Map<String, Object> getResult() {
-        return new HashMap<>();
     }
 }

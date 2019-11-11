@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
-import static com.likeageek.randomizer.shufflers.gym.Gyms.CELADON_GYM;
-import static com.likeageek.randomizer.shufflers.gym.Trainers.Erika;
+import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
+import static com.likeageek.randomizer.shufflers.gym.Trainers.*;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,12 +36,24 @@ public class GymShufflerTest {
 
     @Test
     public void shouldProcessGymsWithWarpID() throws URISyntaxException, IOException {
+        Map<String, Object> cities = new HashMap<>();
         Integer[] viridianRangeLevel = {42, 50};
         int viridianWarpId = 4;
         Trainers celadonTrainer = Erika;
+        cities.put("ViridianCity", gym().warpId(viridianWarpId).pokemonRangeLevel(viridianRangeLevel)
+                .name(CELADON_GYM).trainer(celadonTrainer).build());
 
-        Map<String, Object> cities = new HashMap<>();
-        cities.put("ViridianCity", gym().warpId(viridianWarpId).trainer(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build());
+        Integer[] pewterRangeLevel = {12, 14};
+        int pewterWarpId = 2;
+        Trainers saffronTrainer = Sabrina;
+        cities.put("PewterCity", gym().warpId(pewterWarpId).pokemonRangeLevel(pewterRangeLevel)
+                .name(SAFFRON_GYM).trainer(saffronTrainer).build());
+
+        Integer[] ceruleanRangeLevel = {24, 29};
+        int ceruleanWarpId = 3;
+        Trainers viridianTrainer = Giovanni;
+        cities.put("CeruleanCity", gym().warpId(ceruleanWarpId).pokemonRangeLevel(ceruleanRangeLevel)
+                .name(VIRIDIAN_GYM).trainer(viridianTrainer).build());
 
         gymShuffler.process(cities);
 
