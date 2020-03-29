@@ -21,8 +21,8 @@ public final class GymBuilder {
         return this;
     }
 
-    public GymBuilder trainer(Trainers trainer) {
-        gym.setTrainer(trainer);
+    public GymBuilder trainer(Leaders trainer) {
+        gym.setLeader(trainer);
         return this;
     }
 

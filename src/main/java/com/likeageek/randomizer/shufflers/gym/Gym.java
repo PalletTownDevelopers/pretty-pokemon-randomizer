@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Gym {
     private Gyms name;
     private int warpId;
-    private Trainers trainer;
+    private Leaders leader;
     private Integer[] pokemonRangeLevel;
 
     public Gyms getName() {
@@ -24,12 +24,12 @@ public class Gym {
         this.warpId = warpId;
     }
 
-    Trainers getTrainer() {
-        return trainer;
+    Leaders getLeader() {
+        return leader;
     }
 
-    void setTrainer(Trainers trainer) {
-        this.trainer = trainer;
+    void setLeader(Leaders leader) {
+        this.leader = leader;
     }
 
     Integer[] getPokemonRangeLevel() {
@@ -45,7 +45,7 @@ public class Gym {
         return "Gym{" +
                 "name=" + name +
                 ", warpId=" + warpId +
-                ", trainer=" + trainer +
+                ", leader=" + leader +
                 ", pokemonRangeLevel=" + Arrays.toString(pokemonRangeLevel) +
                 '}';
     }

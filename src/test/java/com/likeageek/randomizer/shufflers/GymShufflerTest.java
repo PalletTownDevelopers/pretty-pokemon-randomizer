@@ -5,7 +5,7 @@ import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
-import com.likeageek.randomizer.shufflers.gym.Trainers;
+import com.likeageek.randomizer.shufflers.gym.Leaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +14,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
 import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
-import static com.likeageek.randomizer.shufflers.gym.Trainers.*;
+import static com.likeageek.randomizer.shufflers.gym.Leaders.*;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,19 +40,19 @@ public class GymShufflerTest {
         Map<String, Object> cities = new HashMap<>();
         Integer[] viridianRangeLevel = {42, 50};
         int viridianWarpId = 4;
-        Trainers celadonTrainer = Erika;
+        Leaders celadonTrainer = Erika;
         cities.put("ViridianCity", gym().warpId(viridianWarpId).pokemonRangeLevel(viridianRangeLevel)
                 .name(CELADON_GYM).trainer(celadonTrainer).build());
 
         Integer[] pewterRangeLevel = {12, 14};
         int pewterWarpId = 2;
-        Trainers saffronTrainer = Sabrina;
+        Leaders saffronTrainer = Sabrina;
         cities.put("PewterCity", gym().warpId(pewterWarpId).pokemonRangeLevel(pewterRangeLevel)
                 .name(SAFFRON_GYM).trainer(saffronTrainer).build());
 
         Integer[] ceruleanRangeLevel = {24, 29};
         int ceruleanWarpId = 3;
-        Trainers viridianTrainer = Giovanni;
+        Leaders viridianTrainer = Giovanni;
         cities.put("CeruleanCity", gym().warpId(ceruleanWarpId).pokemonRangeLevel(ceruleanRangeLevel)
                 .name(VIRIDIAN_GYM).trainer(viridianTrainer).build());
 
@@ -79,12 +80,19 @@ public class GymShufflerTest {
     public void shouldShuffleGyms() {
         Integer[] viridianRangeLevel = {42, 50};
         int viridianWarpId = 4;
-        Trainers celadonTrainer = Erika;
+        Leaders celadonTrainer = Erika;
 
         Map<String, Object> gyms = gymShuffler.shuffle();
 
         Gym newViridianGym = gym().warpId(viridianWarpId).trainer(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
         assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
+    }
+
+    @Test
+    public void shouldReadGymTrainers() throws URISyntaxException, IOException {
+        String[] gymFile = new String(readAllBytes(get(getClass().getResource("../CeladonGym-shuffled.txt").toURI()))).split("\n\t");
+        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(gymFile);
+        assertThat(trainers.size()).isEqualTo(4);
     }
 
     static class FakeAsmFileManager implements IFileManager {

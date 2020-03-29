@@ -1,6 +1,6 @@
 package com.likeageek.randomizer.shufflers.gym;
 
-public enum Trainers {
+public enum Leaders {
     Brock,
     Misty,
     LtSurge,

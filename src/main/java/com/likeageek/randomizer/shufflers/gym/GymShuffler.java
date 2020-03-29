@@ -13,7 +13,7 @@ import static com.likeageek.randomizer.shufflers.gym.Cities.*;
 import static com.likeageek.randomizer.shufflers.gym.CityBuilder.city;
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
 import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
-import static com.likeageek.randomizer.shufflers.gym.Trainers.*;
+import static com.likeageek.randomizer.shufflers.gym.Leaders.*;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
 
@@ -69,7 +69,7 @@ public class GymShuffler implements IShuffler {
         return gym()
                 .name(Gyms.valueOf(gym.getName().toString()))
                 .warpId(city.getGym().getWarpId())
-                .trainer(gym.getTrainer())
+                .trainer(gym.getLeader())
                 .pokemonRangeLevel(city.getGym().getPokemonRangeLevel())
                 .build();
     }
@@ -92,7 +92,7 @@ public class GymShuffler implements IShuffler {
             for (Map.Entry<String, Object> entry : gyms.entrySet()) {
                 String city = entry.getKey();
                 Gym gym = (Gym) (gyms.get(city));
-                buildAsmTrainerParties(gym.getTrainer(), gym.getPokemonRangeLevel(), lines);
+                buildAsmTrainerParties(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
             }
             String join = join("\n\t", lines);
             this.asmFileManager.write(filePath, join);
@@ -111,9 +111,9 @@ public class GymShuffler implements IShuffler {
         }
     }
 
-    private void buildAsmTrainerParties(Trainers trainer, Integer[] pokemonRangeLevel, String[] lines) {
+    private void buildAsmTrainerParties(Leaders trainer, Integer[] pokemonRangeLevel, String[] lines) {
         List<String> linesList = asList(lines);
-        OptionalInt index = IntStream.range(0, linesList.size())
+        OptionalInt gymLeaderDataIndex = IntStream.range(0, linesList.size())
                 .filter(i -> linesList.get(i).contains(trainer.name() + "Data:"))
                 .findFirst();
 
@@ -121,20 +121,20 @@ public class GymShuffler implements IShuffler {
         if ("Giovanni".equals(trainer.name())) {
             oppFromGymFile = 3;
         }
-        int indexOfTrainerErika = index.getAsInt() + oppFromGymFile;
+        int GymLeaderIndex = gymLeaderDataIndex.getAsInt() + oppFromGymFile;
 
-        String[] split = lines[indexOfTrainerErika].split(",");
-        for (int i = 2; i < split.length; i += 2) {
-            Object o1 = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
-            lines[indexOfTrainerErika] = this.asmFileParser.editLine(lines[indexOfTrainerErika], String.valueOf(o1), i);
+        String[] pokemonGymLeader = lines[GymLeaderIndex].split(",");
+        for (int position = 2; position < pokemonGymLeader.length; position += 2) {
+            Object pokemonLevel = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
+            lines[GymLeaderIndex] = this.asmFileParser.editLine(lines[GymLeaderIndex], String.valueOf(pokemonLevel), position);
         }
     }
 
     private void buildGymAsmFile(String gym, int warpId) {
         try {
             String gymName = Gyms.valueOf(gym).getName();
-            String[] lines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
-            String gymFileContent = buildAsmFileGym(warpId, lines);
+            String[] gymLines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
+            String gymFileContent = buildAsmFileGym(warpId, gymLines);
             this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,5 +183,28 @@ public class GymShuffler implements IShuffler {
         if ("ViridianCity".equals(cityName)) {
             lines[lineNumber] = lines[lineNumber].concat("\n");
         }
+    }
+
+    public Map<String, List<Integer>> getTrainers(String[] gymFile) {
+        Map<String, List<Integer>> trainersOpp = new HashMap<>();
+        List<String> gymLines = asList(gymFile);
+        Object[] trainers = gymLines.stream().filter(s -> s.contains("OPP_")).toArray();
+        trainers[0] = null;
+
+        for (int i = 1; i < trainers.length; i++) {
+            String trainerLine = (String) trainers[i];
+            String[] line = trainerLine.split(",");
+            String name = line[line.length - 2].split("_")[1].toLowerCase();
+            Integer opp = Integer.valueOf(line[line.length - 1].trim());
+            if (trainersOpp.containsKey(name)) {
+                trainersOpp.get(name).add(opp);
+            } else {
+                List<Integer> integers = new ArrayList<>();
+                integers.add(opp);
+                trainersOpp.put(name, integers);
+            }
+
+        }
+        return trainersOpp;
     }
 }
