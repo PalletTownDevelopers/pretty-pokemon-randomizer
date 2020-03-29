@@ -42,19 +42,19 @@ public class GymShufflerTest {
         int viridianWarpId = 4;
         Leaders celadonTrainer = Erika;
         cities.put("ViridianCity", gym().warpId(viridianWarpId).pokemonRangeLevel(viridianRangeLevel)
-                .name(CELADON_GYM).trainer(celadonTrainer).build());
+                .name(CELADON_GYM).leader(celadonTrainer).build());
 
         Integer[] pewterRangeLevel = {12, 14};
         int pewterWarpId = 2;
         Leaders saffronTrainer = Sabrina;
         cities.put("PewterCity", gym().warpId(pewterWarpId).pokemonRangeLevel(pewterRangeLevel)
-                .name(SAFFRON_GYM).trainer(saffronTrainer).build());
+                .name(SAFFRON_GYM).leader(saffronTrainer).build());
 
         Integer[] ceruleanRangeLevel = {24, 29};
         int ceruleanWarpId = 3;
         Leaders viridianTrainer = Giovanni;
         cities.put("CeruleanCity", gym().warpId(ceruleanWarpId).pokemonRangeLevel(ceruleanRangeLevel)
-                .name(VIRIDIAN_GYM).trainer(viridianTrainer).build());
+                .name(VIRIDIAN_GYM).leader(viridianTrainer).build());
 
         gymShuffler.process(cities);
 
@@ -84,14 +84,13 @@ public class GymShufflerTest {
 
         Map<String, Object> gyms = gymShuffler.shuffle();
 
-        Gym newViridianGym = gym().warpId(viridianWarpId).trainer(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
+        Gym newViridianGym = gym().warpId(viridianWarpId).leader(celadonTrainer).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
         assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
     }
 
     @Test
-    public void shouldReadGymTrainers() throws URISyntaxException, IOException {
-        String[] gymFile = new String(readAllBytes(get(getClass().getResource("../CeladonGym-shuffled.txt").toURI()))).split("\n\t");
-        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(gymFile);
+    public void shouldReadGymTrainers() {
+        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(CELADON_GYM);
         assertThat(trainers.size()).isEqualTo(4);
         assertThat(trainers.get("Beauty")).isEqualTo(asList(1,2,3));
         assertThat(trainers.get("Lass")).isEqualTo(asList(17,18));

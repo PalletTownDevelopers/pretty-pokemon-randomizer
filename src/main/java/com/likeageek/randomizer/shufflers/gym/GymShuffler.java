@@ -27,7 +27,7 @@ public class GymShuffler implements IShuffler {
     private IFileParser asmFileParser;
     private IRandomEngine randomEngine;
     private List<City> cities;
-    private Map<String, Integer> cityLineNumber = new HashMap<String, Integer>() {{
+    private Map<String, Integer> cityLineNumber = new HashMap<>() {{
         put("ViridianCity", 7);
         put("CeladonCity", 9);
         put("VermilionCity", 6);
@@ -71,7 +71,7 @@ public class GymShuffler implements IShuffler {
         return gym()
                 .name(Gyms.valueOf(gym.getName().toString()))
                 .warpId(city.getGym().getWarpId())
-                .trainer(gym.getLeader())
+                .leader(gym.getLeader())
                 .pokemonRangeLevel(city.getGym().getPokemonRangeLevel())
                 .build();
     }
@@ -150,14 +150,14 @@ public class GymShuffler implements IShuffler {
     }
 
     private List<City> buildCities() {
-        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).trainer(Brock).pokemonRangeLevel(new Integer[]{12, 14}).build();
-        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).trainer(Misty).pokemonRangeLevel(new Integer[]{18, 21}).build();
-        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).trainer(LtSurge).pokemonRangeLevel(new Integer[]{18, 24}).build();
-        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).trainer(Erika).pokemonRangeLevel(new Integer[]{24, 29}).build();
-        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).trainer(Koga).pokemonRangeLevel(new Integer[]{37, 43}).build();
-        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).trainer(Sabrina).pokemonRangeLevel(new Integer[]{37, 43}).build();
-        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).trainer(Blaine).pokemonRangeLevel(new Integer[]{40, 47}).build();
-        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).trainer(Giovanni).pokemonRangeLevel(new Integer[]{42, 50}).build();
+        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).leader(Brock).trainers(getTrainers(PEWTER_GYM)).pokemonRangeLevel(new Integer[]{12, 14}).build();
+        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).leader(Misty).trainers(getTrainers(CERULEAN_GYM)).pokemonRangeLevel(new Integer[]{18, 21}).build();
+        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).leader(LtSurge).trainers(getTrainers(VERMILION_GYM)).pokemonRangeLevel(new Integer[]{18, 24}).build();
+        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).leader(Erika).trainers(getTrainers(CELADON_GYM)).pokemonRangeLevel(new Integer[]{24, 29}).build();
+        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).leader(Koga).trainers(getTrainers(FUCHSIA_GYM)).pokemonRangeLevel(new Integer[]{37, 43}).build();
+        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).leader(Sabrina).trainers(getTrainers(SAFFRON_GYM)).pokemonRangeLevel(new Integer[]{37, 43}).build();
+        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).leader(Blaine).trainers(getTrainers(CINNABAR_GYM)).pokemonRangeLevel(new Integer[]{40, 47}).build();
+        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).leader(Giovanni).trainers(getTrainers(VIRIDIAN_GYM)).pokemonRangeLevel(new Integer[]{42, 50}).build();
 
         return asList(
                 city().name(PewterCity).gym(pewterGym).build(),
@@ -187,7 +187,13 @@ public class GymShuffler implements IShuffler {
         }
     }
 
-    public Map<String, List<Integer>> getTrainers(String[] gymFile) {
+    public Map<String, List<Integer>> getTrainers(Gyms gymFileName) {
+        String[] gymFile = new String[0];
+        try {
+            gymFile = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymFileName.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Map<String, List<Integer>> trainersOpp = new HashMap<>();
         List<String> gymLines = asList(gymFile);
         Object[] trainers = gymLines.stream().filter(s -> s.contains(TRAINER_PREFIX)).toArray();

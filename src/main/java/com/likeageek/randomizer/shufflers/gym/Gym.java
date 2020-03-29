@@ -1,12 +1,15 @@
 package com.likeageek.randomizer.shufflers.gym;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Gym {
     private Gyms name;
     private int warpId;
     private Leaders leader;
     private Integer[] pokemonRangeLevel;
+    private Map<String, List<Integer>> trainers;
 
     public Gyms getName() {
         return name;
@@ -16,7 +19,7 @@ public class Gym {
         this.name = name;
     }
 
-    public int getWarpId() {
+    int getWarpId() {
         return warpId;
     }
 
@@ -30,6 +33,14 @@ public class Gym {
 
     void setLeader(Leaders leader) {
         this.leader = leader;
+    }
+
+    Map<String, List<Integer>> getTrainers() {
+        return trainers;
+    }
+
+    void setTrainers(Map<String, List<Integer>> trainers) {
+        this.trainers = trainers;
     }
 
     Integer[] getPokemonRangeLevel() {

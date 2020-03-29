@@ -1,5 +1,8 @@
 package com.likeageek.randomizer.shufflers.gym;
 
+import java.util.List;
+import java.util.Map;
+
 public final class GymBuilder {
     private Gym gym;
 
@@ -21,8 +24,13 @@ public final class GymBuilder {
         return this;
     }
 
-    public GymBuilder trainer(Leaders trainer) {
-        gym.setLeader(trainer);
+    public GymBuilder leader(Leaders leader) {
+        gym.setLeader(leader);
+        return this;
+    }
+
+    public GymBuilder trainers(Map<String, List<Integer>> trainers) {
+        gym.setTrainers(trainers);
         return this;
     }
 
