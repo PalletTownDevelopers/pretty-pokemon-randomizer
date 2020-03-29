@@ -4,6 +4,7 @@ import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
 import com.likeageek.randomizer.IRandomEngine;
 import com.likeageek.randomizer.shufflers.IShuffler;
+import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -20,6 +21,7 @@ import static java.util.Arrays.asList;
 public class GymShuffler implements IShuffler {
     private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
     private static final String DATA_FILEPATH = "/data/";
+    public static final String TRAINER_PREFIX = "OPP_";
     private Map<String, Object> gymsRandomized = new HashMap<>();
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
@@ -188,20 +190,22 @@ public class GymShuffler implements IShuffler {
     public Map<String, List<Integer>> getTrainers(String[] gymFile) {
         Map<String, List<Integer>> trainersOpp = new HashMap<>();
         List<String> gymLines = asList(gymFile);
-        Object[] trainers = gymLines.stream().filter(s -> s.contains("OPP_")).toArray();
+        Object[] trainers = gymLines.stream().filter(s -> s.contains(TRAINER_PREFIX)).toArray();
         trainers[0] = null;
 
         for (int i = 1; i < trainers.length; i++) {
             String trainerLine = (String) trainers[i];
             String[] line = trainerLine.split(",");
-            String name = line[line.length - 2].split("_")[1].toLowerCase();
+            String name = line[line.length - 2].replace(TRAINER_PREFIX, "").trim();
+            String nameCamelCase = WordUtils.capitalize(WordUtils.capitalizeFully(name, new char[]{'_'}).replaceAll("_", ""));
+
             Integer opp = Integer.valueOf(line[line.length - 1].trim());
-            if (trainersOpp.containsKey(name)) {
-                trainersOpp.get(name).add(opp);
+            if (trainersOpp.containsKey(nameCamelCase)) {
+                trainersOpp.get(nameCamelCase).add(opp);
             } else {
                 List<Integer> integers = new ArrayList<>();
                 integers.add(opp);
-                trainersOpp.put(name, integers);
+                trainersOpp.put(nameCamelCase, integers);
             }
 
         }

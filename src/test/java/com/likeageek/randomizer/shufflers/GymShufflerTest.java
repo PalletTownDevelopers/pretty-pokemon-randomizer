@@ -13,15 +13,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
 import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
 import static com.likeageek.randomizer.shufflers.gym.Leaders.*;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GymShufflerTest {
@@ -93,6 +93,10 @@ public class GymShufflerTest {
         String[] gymFile = new String(readAllBytes(get(getClass().getResource("../CeladonGym-shuffled.txt").toURI()))).split("\n\t");
         Map<String, List<Integer>> trainers = gymShuffler.getTrainers(gymFile);
         assertThat(trainers.size()).isEqualTo(4);
+        assertThat(trainers.get("Beauty")).isEqualTo(asList(1,2,3));
+        assertThat(trainers.get("Lass")).isEqualTo(asList(17,18));
+        assertThat(trainers.get("CooltrainerF")).isEqualTo(singletonList(1));
+        assertThat(trainers.get("JrTrainerF")).isEqualTo(singletonList(11));
     }
 
     static class FakeAsmFileManager implements IFileManager {
