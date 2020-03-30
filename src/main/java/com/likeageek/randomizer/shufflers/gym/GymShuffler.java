@@ -94,7 +94,10 @@ public class GymShuffler implements IShuffler {
             for (Map.Entry<String, Object> entry : gyms.entrySet()) {
                 String city = entry.getKey();
                 Gym gym = (Gym) (gyms.get(city));
-                buildAsmTrainerParties(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
+                getTrainers(gym.getName()).forEach((trainerName, trainerOppPosition) -> {
+                    buildAsmTrainerPartiesForTrainers(trainerName, trainerOppPosition, gym.getPokemonRangeLevel(), lines);
+                });
+                buildAsmTrainerPartiesForLeaders(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
             }
             String join = join("\n\t", lines);
             this.asmFileManager.write(filePath, join);
@@ -113,20 +116,36 @@ public class GymShuffler implements IShuffler {
         }
     }
 
-    private void buildAsmTrainerParties(Leaders trainer, Integer[] pokemonRangeLevel, String[] lines) {
+    private void buildAsmTrainerPartiesForLeaders(Leaders leader, Integer[] pokemonRangeLevel, String[] lines) {
         List<String> linesList = asList(lines);
         OptionalInt gymLeaderDataIndex = IntStream.range(0, linesList.size())
-                .filter(i -> linesList.get(i).contains(trainer.name() + "Data:"))
+                .filter(i -> linesList.get(i).contains(leader.name() + "Data:"))
                 .findFirst();
 
         int oppFromGymFile = 1;
-        if ("Giovanni".equals(trainer.name())) {
+        if ("Giovanni".equals(leader.name())) {
             oppFromGymFile = 3;
         }
         int GymLeaderIndex = gymLeaderDataIndex.getAsInt() + oppFromGymFile;
 
         String[] pokemonGymLeader = lines[GymLeaderIndex].split(",");
         for (int position = 2; position < pokemonGymLeader.length; position += 2) {
+            Object pokemonLevel = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
+            lines[GymLeaderIndex] = this.asmFileParser.editLine(lines[GymLeaderIndex], String.valueOf(pokemonLevel), position);
+        }
+    }
+
+    private void buildAsmTrainerPartiesForTrainers(String trainerName, List<Integer> trainerOppPosition, Integer[] pokemonRangeLevel, String[] lines) {
+        List<String> linesList = asList(lines);
+        OptionalInt gymLeaderDataIndex = IntStream.range(0, linesList.size())
+                .filter(i -> linesList.get(i).contains(trainerName + "Data:"))
+                .findFirst();
+
+        for (int index = 0; index < trainerOppPosition.size(); index++) {
+            int oppFromGymFile = trainerOppPosition.get(index);
+            int GymLeaderIndex = gymLeaderDataIndex.getAsInt() + oppFromGymFile;
+
+            int position = 1;
             Object pokemonLevel = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
             lines[GymLeaderIndex] = this.asmFileParser.editLine(lines[GymLeaderIndex], String.valueOf(pokemonLevel), position);
         }
@@ -211,6 +230,9 @@ public class GymShuffler implements IShuffler {
             } else {
                 List<Integer> integers = new ArrayList<>();
                 integers.add(opp);
+                if (nameCamelCase.equals("PsychicTr")) {
+                    nameCamelCase = "Psychic";
+                }
                 trainersOpp.put(nameCamelCase, integers);
             }
 

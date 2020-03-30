@@ -13,7 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
 import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
@@ -89,13 +91,21 @@ public class GymShufflerTest {
     }
 
     @Test
-    public void shouldReadGymTrainers() {
+    public void shouldReadGymTrainersAndTransformNameToCamelCase() {
         Map<String, List<Integer>> trainers = gymShuffler.getTrainers(CELADON_GYM);
         assertThat(trainers.size()).isEqualTo(4);
-        assertThat(trainers.get("Beauty")).isEqualTo(asList(1,2,3));
-        assertThat(trainers.get("Lass")).isEqualTo(asList(17,18));
+        assertThat(trainers.get("Beauty")).isEqualTo(asList(1, 2, 3));
+        assertThat(trainers.get("Lass")).isEqualTo(asList(17, 18));
         assertThat(trainers.get("CooltrainerF")).isEqualTo(singletonList(1));
         assertThat(trainers.get("JrTrainerF")).isEqualTo(singletonList(11));
+    }
+
+    @Test
+    public void shouldReadGymTrainersAndReplacePsychicTr_whenSaffronGym() {
+        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(SAFFRON_GYM);
+        assertThat(trainers.size()).isEqualTo(2);
+        assertThat(trainers.get("Channeler")).isEqualTo(asList(22, 23, 24));
+        assertThat(trainers.get("Psychic")).isEqualTo(singletonList(4));
     }
 
     static class FakeAsmFileManager implements IFileManager {

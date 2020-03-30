@@ -14,7 +14,9 @@ public class AsmFileParserTest {
         assertThat(line).isEqualTo("an, asm-replaced, line");
     }
 
-
-    //db $FF,45,RHYHORN,42,DUGTRIO,44,NIDOQUEEN,45,NIDOKING,50,RHYDON,0
-
+    @Test
+    public void shouldReplaceAValueInAsmLine_whenDbExists() {
+        String line = asmFileParser.editLine("db 42, asm, line", "007", 1);
+        assertThat(line).isEqualTo("db 007, asm, line");
+    }
 }
