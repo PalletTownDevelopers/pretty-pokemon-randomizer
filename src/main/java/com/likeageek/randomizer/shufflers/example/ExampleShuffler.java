@@ -1,14 +1,14 @@
-package com.likeageek.randomizer.shufflers.empty;
+package com.likeageek.randomizer.shufflers.example;
 
 import com.likeageek.randomizer.shufflers.IShuffler;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmptyShuffler implements IShuffler {
+public class ExampleShuffler implements IShuffler {
 
-    public EmptyShuffler() {
-        System.out.println("empty shuffler");
+    public ExampleShuffler() {
+        System.out.println("empty example shuffler");
     }
 
     @Override

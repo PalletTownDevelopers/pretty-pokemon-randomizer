@@ -1,7 +1,6 @@
 package com.likeageek.randomizer;
 
 import com.likeageek.randomizer.shufflers.IShuffler;
-import com.likeageek.randomizer.shufflers.empty.EmptyShuffler;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
 
 import java.io.IOException;
@@ -28,16 +27,15 @@ public class GameShaker {
     public void init() throws IOException {
         asmFileManager.copyGame();
         this.shufflers = new ArrayList<>(asList(
-                new GymShuffler(asmFileManager, asmFileParser, randomEngine),
-                new EmptyShuffler()
+                new GymShuffler(asmFileManager, asmFileParser, randomEngine)
         ));
     }
 
     public void shake() {
         this.shufflers.forEach(shuffler -> {
-            Map<String, Object> shuffledArenas = shuffler.shuffle();
-            shuffler.process(shuffledArenas);
-            shuffledArenas.forEach((city, gym) -> {
+            Map<String, Object> shuffledGameObject = shuffler.shuffle();
+            shuffler.process(shuffledGameObject);
+            shuffledGameObject.forEach((city, gym) -> {
                 System.out.println(city + ":" + gym.toString() + "\r\n");
             });
         });
