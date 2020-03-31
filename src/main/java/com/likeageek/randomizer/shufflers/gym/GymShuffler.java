@@ -21,12 +21,10 @@ import static java.util.Arrays.asList;
 public class GymShuffler implements IShuffler {
     private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
     private static final String DATA_FILEPATH = "/data/";
-    public static final String TRAINER_PREFIX = "OPP_";
-    private Map<String, Object> gymsRandomized = new HashMap<>();
+    private static final String TRAINER_PREFIX = "OPP_";
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
     private IRandomEngine randomEngine;
-    private List<City> cities;
     private Map<String, Integer> cityLineNumber = new HashMap<>() {{
         put("ViridianCity", 7);
         put("CeladonCity", 9);
@@ -42,41 +40,38 @@ public class GymShuffler implements IShuffler {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
         this.randomEngine = randomEngine;
-        this.cities = this.buildCities();
         System.out.println("gym shuffler");
     }
 
     @Override
     public Map<String, Object> shuffle() {
-        List<Object> citiesRandomized = this.randomEngine.random(new ArrayList<>(this.cities));
+        Map<String, Object> gymsRandomized = new HashMap<>();
+        List<City> cities = this.buildCities();
+        List<Object> citiesRandomized = this.randomEngine.random(new ArrayList<>(cities));
 
-        for (int index = 0; index < this.cities.size(); index++) {
-            City city = this.cities.get(index);
+        for (int index = 0; index < cities.size(); index++) {
+            City city = cities.get(index);
             String cityName = city.getName().toString();
 
             Gym gym = ((City) citiesRandomized.get(index)).getGym();
-            Gym newGym = convertNewGym(city, gym);
-            this.gymsRandomized.put(cityName, newGym);
+            Gym newGym = gym()
+                    .name(Gyms.valueOf(gym.getName().toString()))
+                    .warpId(city.getGym().getWarpId())
+                    .leader(gym.getLeader())
+                    .pokemonRangeLevel(city.getGym().getPokemonRangeLevel())
+                    .build();
+            gymsRandomized.put(cityName, newGym);
         }
-        return this.gymsRandomized;
+        return gymsRandomized;
     }
 
     @Override
     public void process(Map<String, Object> gyms) {
-        processCityAndGym(gyms);
-        processTrainerParties(gyms);
+        processCitiesWithGyms(gyms);
+        processGymsTrainers(gyms);
     }
 
-    private Gym convertNewGym(City city, Gym gym) {
-        return gym()
-                .name(Gyms.valueOf(gym.getName().toString()))
-                .warpId(city.getGym().getWarpId())
-                .leader(gym.getLeader())
-                .pokemonRangeLevel(city.getGym().getPokemonRangeLevel())
-                .build();
-    }
-
-    private void processCityAndGym(Map<String, Object> gyms) {
+    private void processCitiesWithGyms(Map<String, Object> gyms) {
         for (Map.Entry<String, Object> entry : gyms.entrySet()) {
             String city = entry.getKey();
             Gym gym = (Gym) (gyms.get(city));
@@ -87,10 +82,10 @@ public class GymShuffler implements IShuffler {
         }
     }
 
-    private void processTrainerParties(Map<String, Object> gyms) {
+    private void processGymsTrainers(Map<String, Object> gyms) {
         String filePath = DATA_FILEPATH + "trainer_parties";
         try {
-            String[] lines = readAsmFile(filePath);
+            String[] lines = this.asmFileManager.read(filePath);
             for (Map.Entry<String, Object> entry : gyms.entrySet()) {
                 String city = entry.getKey();
                 Gym gym = (Gym) (gyms.get(city));
@@ -108,7 +103,7 @@ public class GymShuffler implements IShuffler {
 
     private void buildCityAsmFile(String city, String gymToReplace) {
         try {
-            String[] lines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city);
+            String[] lines = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city);
             String cityFileContent = buildAsmFileCity(city, gymToReplace, lines);
             this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city, cityFileContent);
         } catch (IOException e) {
@@ -141,8 +136,7 @@ public class GymShuffler implements IShuffler {
                 .filter(i -> linesList.get(i).contains(trainerName + "Data:"))
                 .findFirst();
 
-        for (int index = 0; index < trainerOppPosition.size(); index++) {
-            int oppFromGymFile = trainerOppPosition.get(index);
+        for (int oppFromGymFile : trainerOppPosition) {
             int GymLeaderIndex = gymLeaderDataIndex.getAsInt() + oppFromGymFile;
 
             int position = 1;
@@ -154,7 +148,7 @@ public class GymShuffler implements IShuffler {
     private void buildGymAsmFile(String gym, int warpId) {
         try {
             String gymName = Gyms.valueOf(gym).getName();
-            String[] gymLines = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
+            String[] gymLines = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
             String gymFileContent = buildAsmFileGym(warpId, gymLines);
             this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
         } catch (IOException e) {
@@ -189,10 +183,6 @@ public class GymShuffler implements IShuffler {
                 city().name(ViridianCity).gym(viridianGym).build());
     }
 
-    private String[] readAsmFile(String fileName) throws IOException {
-        return this.asmFileManager.read(fileName).split("\n\t");
-    }
-
     private String buildAsmFileCity(String cityName, String gymName, String[] lines) {
         Integer lineNumber = this.cityLineNumber.get(cityName);
         lines[lineNumber] = this.asmFileParser.editLine(lines[lineNumber], gymName, 4);
@@ -209,7 +199,7 @@ public class GymShuffler implements IShuffler {
     public Map<String, List<Integer>> getTrainers(Gyms gymFileName) {
         String[] gymFile = new String[0];
         try {
-            gymFile = readAsmFile(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymFileName.getName());
+            gymFile = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymFileName.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }

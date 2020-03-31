@@ -5,27 +5,27 @@ public class Configuration {
     private String pokemonDirectory;
     private String outputDirectory;
 
-    public long getSeed() {
+    long getSeed() {
         return seed;
     }
 
-    public void setSeed(long seed) {
+    void setSeed(long seed) {
         this.seed = seed;
     }
 
-    public String getPokemonDirectory() {
+    String getPokemonDirectory() {
         return pokemonDirectory;
     }
 
-    public void setPokemonDirectory(String pokemonDirectory) {
+    void setPokemonDirectory(String pokemonDirectory) {
         this.pokemonDirectory = pokemonDirectory;
     }
 
-    public String getOutputDirectory() {
+    String getOutputDirectory() {
         return outputDirectory;
     }
 
-    public void setOutputDirectory(String outputDirectory) {
+    void setOutputDirectory(String outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 }

@@ -15,7 +15,7 @@ public class AsmFileManager implements IFileManager {
     private String pokemonPath;
     private String outputPath;
 
-    public AsmFileManager(String pokemonPath, String outputPath) {
+    AsmFileManager(String pokemonPath, String outputPath) {
         this.pokemonPath = pokemonPath;
         this.outputPath = outputPath;
     }
@@ -27,8 +27,8 @@ public class AsmFileManager implements IFileManager {
         printWriter.close();
     }
 
-    public String read(String filePath) throws IOException {
-        return new String(readAllBytes(get(pokemonPath + filePath + ".asm")));
+    public String[] read(String filePath) throws IOException {
+        return new String(readAllBytes(get(pokemonPath + filePath + ".asm"))).split("\n\t");
     }
 
     public void copyGame() throws IOException {

@@ -1,7 +1,7 @@
 package com.likeageek.randomizer.shufflers;
 
 import com.likeageek.randomizer.AsmFileParser;
-import com.likeageek.randomizer.IFileManager;
+import com.likeageek.randomizer.FakeAsmFileManager;
 import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.gym.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
@@ -9,9 +9,7 @@ import com.likeageek.randomizer.shufflers.gym.Leaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GymShufflerTest {
     private GymShuffler gymShuffler;
-    private String outputPath = "/home/likeageek/Projects/randomizer-output/data/";
 
     @BeforeEach
     public void init() {
@@ -59,6 +56,8 @@ public class GymShufflerTest {
                 .name(VIRIDIAN_GYM).leader(viridianTrainer).build());
 
         gymShuffler.process(cities);
+
+        String outputPath = "/home/likeageek/Projects/randomizer-output/data/";
 
         for (Map.Entry<String, Object> entry : cities.entrySet()) {
             String cityName = entry.getKey();
@@ -108,25 +107,5 @@ public class GymShufflerTest {
         assertThat(trainers.get("Psychic")).isEqualTo(singletonList(4));
     }
 
-    static class FakeAsmFileManager implements IFileManager {
-
-        @Override
-        public void write(String filePath, String asmSourceCode) throws IOException {
-            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/" + filePath + ".asm");
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print(asmSourceCode);
-            printWriter.close();
-        }
-
-        @Override
-        public String read(String filePath) throws IOException {
-            return new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + filePath + ".asm")));
-        }
-
-        @Override
-        public void copyGame() throws IOException {
-
-        }
-    }
 }
 
