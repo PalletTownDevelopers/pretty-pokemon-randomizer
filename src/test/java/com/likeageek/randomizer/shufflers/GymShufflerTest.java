@@ -62,17 +62,17 @@ public class GymShufflerTest {
         for (Map.Entry<String, Object> entry : cities.entrySet()) {
             String cityName = entry.getKey();
             Object gym = entry.getValue();
-            String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../" + cityName + "-shuffled.txt").toURI())));
+            String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/" + cityName + "-shuffled.txt").toURI())));
             String cityAsmFile = new String(readAllBytes(get(outputPath + "mapObjects/" + cityName + ".asm")));
             assertThat(cityAsmFile).isEqualTo(expectedCityAsmFile);
 
             String gymName = ((Gym) gym).getName().getName();
-            String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../" + gymName + "-shuffled.txt").toURI())));
+            String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/" + gymName + "-shuffled.txt").toURI())));
             String gymAsmFile = new String(readAllBytes(get(outputPath + "mapObjects/" + gymName + ".asm")));
             assertThat(gymAsmFile).isEqualTo(expectedGymAsmFile);
         }
 
-        String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../trainer_parties-shuffled.txt").toURI())));
+        String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/trainer_parties-shuffled.txt").toURI())));
         String trainerPartiesAsmFile = new String(readAllBytes(get(outputPath + "/trainer_parties.asm")));
         assertThat(trainerPartiesAsmFile).isEqualTo(expectedTrainerPartiesAsmFile);
     }

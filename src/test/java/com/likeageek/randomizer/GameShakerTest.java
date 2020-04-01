@@ -35,7 +35,6 @@ class GameShakerTest {
 
         String consoleOutput = new String(readAllBytes(get("out.log")));
         assertThat(consoleOutput).contains("gym shuffler");
-        assertThat(consoleOutput).contains("empty shuffler");
     }
 
     @Test
@@ -44,6 +43,5 @@ class GameShakerTest {
 
         String consoleOutput = new String(readAllBytes(get("out.log")));
         assertThat(consoleOutput).contains("gym shuffler");
-        assertThat(consoleOutput).contains("empty shuffler");
     }
 }
