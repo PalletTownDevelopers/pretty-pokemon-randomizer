@@ -7,6 +7,7 @@ import java.util.Map;
 public class Gym {
     private Gyms name;
     private int warpId;
+    private Leaders leaderOld;
     private Leaders leader;
     private Integer[] pokemonRangeLevel;
     private Map<String, List<Integer>> trainers;
@@ -25,6 +26,14 @@ public class Gym {
 
     void setWarpId(int warpId) {
         this.warpId = warpId;
+    }
+
+    Leaders getLeaderOld() {
+        return leaderOld;
+    }
+
+    void setLeaderOld(Leaders leaderOld) {
+        this.leaderOld = leaderOld;
     }
 
     Leaders getLeader() {

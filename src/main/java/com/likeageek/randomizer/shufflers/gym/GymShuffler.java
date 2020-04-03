@@ -36,6 +36,28 @@ public class GymShuffler implements IShuffler {
         put("CinnabarIsland", 4);
     }};
 
+    private Map<String, Integer> gymSetEventLineNumber = new HashMap<>() {{
+        put("ViridianGym", 97);
+        put("CeladonGym", 34);
+        put("SaffronGym", 34);
+        put("VermilionGym", 49);
+        put("CeruleanGym", 34);
+        put("PewterGym", 34);
+        put("FuchsiaGym", 36);
+        put("CinnabarGym", 115);
+    }};
+
+    private Map<String, String> gymLeaderEvents = new HashMap<>() {{
+        put("Brock", "EVENT_BEAT_BROCK");
+        put("Misty", "EVENT_BEAT_MISTY");
+        put("LtSurge", "EVENT_BEAT_LT_SURGE");
+        put("Erika", "EVENT_BEAT_ERIKA");
+        put("Koga", "EVENT_BEAT_KOGA");
+        put("Sabrina", "EVENT_BEAT_SABRINA");
+        put("Blaine", "EVENT_BEAT_BLAINE");
+        put("Giovanni", "EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI");
+    }};
+
     public GymShuffler(IFileManager asmFileManager, IFileParser asmFileParser, IRandomEngine randomEngine) {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
@@ -57,6 +79,7 @@ public class GymShuffler implements IShuffler {
             Gym newGym = gym()
                     .name(Gyms.valueOf(gym.getName().toString()))
                     .warpId(city.getGym().getWarpId())
+                    .leaderOld(city.getGym().getLeader())
                     .leader(gym.getLeader())
                     .pokemonRangeLevel(city.getGym().getPokemonRangeLevel())
                     .build();
@@ -79,6 +102,16 @@ public class GymShuffler implements IShuffler {
 
             buildCityAsmFile(city, gymName);
             buildGymAsmFile(gymName, gym.getWarpId());
+
+            try {
+                String gymCamelCase = WordUtils.capitalize(WordUtils.capitalizeFully(gymName, new char[]{'_'}).replaceAll("_", ""));
+                String[] lines = this.asmFileManager.read("/scripts/" + gymCamelCase);
+                int index = gymSetEventLineNumber.get(gymCamelCase);
+                lines[index] = "SetEvent " + gymLeaderEvents.get(gym.getLeaderOld().name());
+                this.asmFileManager.write("/scripts/" + gymCamelCase, join("\n\t", lines));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -29,6 +29,11 @@ public final class GymBuilder {
         return this;
     }
 
+    public GymBuilder leaderOld(Leaders leaderOld) {
+        gym.setLeaderOld(leaderOld);
+        return this;
+    }
+
     public GymBuilder trainers(Map<String, List<Integer>> trainers) {
         gym.setTrainers(trainers);
         return this;
