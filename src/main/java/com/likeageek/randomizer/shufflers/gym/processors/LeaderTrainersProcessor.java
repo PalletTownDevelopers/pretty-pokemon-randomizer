@@ -3,9 +3,9 @@ package com.likeageek.randomizer.shufflers.gym.processors;
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
 import com.likeageek.randomizer.IRandomEngine;
-import com.likeageek.randomizer.shufflers.gym.Gym;
-import com.likeageek.randomizer.shufflers.gym.Gyms;
-import com.likeageek.randomizer.shufflers.gym.Leaders;
+import com.likeageek.randomizer.shufflers.gym.entities.Gym;
+import com.likeageek.randomizer.shufflers.gym.entities.Gyms;
+import com.likeageek.randomizer.shufflers.gym.entities.Leaders;
 import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.likeageek.randomizer.shufflers.gym;
+package com.likeageek.randomizer.shufflers.gym.entities;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.likeageek.randomizer.shufflers.gym;
+package com.likeageek.randomizer.shufflers.gym.entities;
 
 public enum Gyms {
     VIRIDIAN_GYM("ViridianGym"),

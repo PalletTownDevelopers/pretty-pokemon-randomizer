@@ -4,6 +4,9 @@ import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
 import com.likeageek.randomizer.IRandomEngine;
 import com.likeageek.randomizer.shufflers.IShuffler;
+import com.likeageek.randomizer.shufflers.gym.entities.City;
+import com.likeageek.randomizer.shufflers.gym.entities.Gym;
+import com.likeageek.randomizer.shufflers.gym.entities.Gyms;
 import com.likeageek.randomizer.shufflers.gym.processors.CitiesGymProcessor;
 import com.likeageek.randomizer.shufflers.gym.processors.LeaderTrainersProcessor;
 
@@ -12,11 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.likeageek.randomizer.shufflers.gym.Cities.*;
-import static com.likeageek.randomizer.shufflers.gym.CityBuilder.city;
-import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
-import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
-import static com.likeageek.randomizer.shufflers.gym.Leaders.*;
+import static com.likeageek.randomizer.shufflers.gym.entities.Cities.*;
+import static com.likeageek.randomizer.shufflers.gym.entities.CityBuilder.city;
+import static com.likeageek.randomizer.shufflers.gym.entities.GymBuilder.gym;
+import static com.likeageek.randomizer.shufflers.gym.entities.Gyms.*;
+import static com.likeageek.randomizer.shufflers.gym.entities.Leaders.*;
 import static java.util.Arrays.asList;
 
 public class GymShuffler implements IShuffler {

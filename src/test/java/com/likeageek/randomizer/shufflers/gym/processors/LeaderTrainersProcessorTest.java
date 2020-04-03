@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static com.likeageek.randomizer.shufflers.gym.Gyms.CELADON_GYM;
-import static com.likeageek.randomizer.shufflers.gym.Gyms.SAFFRON_GYM;
+import static com.likeageek.randomizer.shufflers.gym.entities.Gyms.CELADON_GYM;
+import static com.likeageek.randomizer.shufflers.gym.entities.Gyms.SAFFRON_GYM;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;

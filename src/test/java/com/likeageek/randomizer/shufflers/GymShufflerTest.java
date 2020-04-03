@@ -3,25 +3,22 @@ package com.likeageek.randomizer.shufflers;
 import com.likeageek.randomizer.AsmFileParser;
 import com.likeageek.randomizer.FakeAsmFileManager;
 import com.likeageek.randomizer.RandomEngine;
-import com.likeageek.randomizer.shufflers.gym.Gym;
+import com.likeageek.randomizer.shufflers.gym.entities.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
-import com.likeageek.randomizer.shufflers.gym.Leaders;
+import com.likeageek.randomizer.shufflers.gym.entities.Leaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.likeageek.randomizer.shufflers.gym.GymBuilder.gym;
-import static com.likeageek.randomizer.shufflers.gym.Gyms.*;
-import static com.likeageek.randomizer.shufflers.gym.Leaders.*;
+import static com.likeageek.randomizer.shufflers.gym.entities.GymBuilder.gym;
+import static com.likeageek.randomizer.shufflers.gym.entities.Gyms.*;
+import static com.likeageek.randomizer.shufflers.gym.entities.Leaders.*;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GymShufflerTest {
