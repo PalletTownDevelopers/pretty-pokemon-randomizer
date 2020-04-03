@@ -105,24 +105,5 @@ public class GymShufflerTest {
         Gym newViridianGym = gym().warpId(viridianWarpId).leader(celadonTrainer).leaderOld(Giovanni).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
         assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
     }
-
-    @Test
-    public void shouldReadGymTrainersAndTransformNameToCamelCase() {
-        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(CELADON_GYM);
-        assertThat(trainers.size()).isEqualTo(4);
-        assertThat(trainers.get("Beauty")).isEqualTo(asList(1, 2, 3));
-        assertThat(trainers.get("Lass")).isEqualTo(asList(17, 18));
-        assertThat(trainers.get("CooltrainerF")).isEqualTo(singletonList(1));
-        assertThat(trainers.get("JrTrainerF")).isEqualTo(singletonList(11));
-    }
-
-    @Test
-    public void shouldReadGymTrainersAndReplacePsychicTr_whenSaffronGym() {
-        Map<String, List<Integer>> trainers = gymShuffler.getTrainers(SAFFRON_GYM);
-        assertThat(trainers.size()).isEqualTo(2);
-        assertThat(trainers.get("Channeler")).isEqualTo(asList(22, 23, 24));
-        assertThat(trainers.get("Psychic")).isEqualTo(singletonList(4));
-    }
-
 }
 

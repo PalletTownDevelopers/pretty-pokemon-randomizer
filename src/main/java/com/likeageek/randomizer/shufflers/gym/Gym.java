@@ -20,7 +20,7 @@ public class Gym {
         this.name = name;
     }
 
-    int getWarpId() {
+    public int getWarpId() {
         return warpId;
     }
 
@@ -28,7 +28,7 @@ public class Gym {
         this.warpId = warpId;
     }
 
-    Leaders getLeaderOld() {
+    public Leaders getLeaderOld() {
         return leaderOld;
     }
 
@@ -36,7 +36,7 @@ public class Gym {
         this.leaderOld = leaderOld;
     }
 
-    Leaders getLeader() {
+    public Leaders getLeader() {
         return leader;
     }
 
@@ -52,7 +52,7 @@ public class Gym {
         this.trainers = trainers;
     }
 
-    Integer[] getPokemonRangeLevel() {
+    public Integer[] getPokemonRangeLevel() {
         return pokemonRangeLevel;
     }
 
