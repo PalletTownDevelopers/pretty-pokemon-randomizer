@@ -6,50 +6,51 @@ import com.likeageek.randomizer.IRandomEngine;
 import com.likeageek.randomizer.shufflers.gym.entities.Gym;
 import com.likeageek.randomizer.shufflers.gym.entities.Gyms;
 import com.likeageek.randomizer.shufflers.gym.entities.Leaders;
-import org.apache.commons.lang.WordUtils;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static java.lang.String.join;
+import static com.likeageek.randomizer.shufflers.gym.entities.Leaders.Giovanni;
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang.WordUtils.capitalize;
+import static org.apache.commons.lang.WordUtils.capitalizeFully;
 
 public class LeaderTrainersProcessor {
     private static final String DATA_FILEPATH = "/data/";
     private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
     private static final String TRAINER_PREFIX = "OPP_";
+    private static final String TRAINER_PARTIES = "trainer_parties";
 
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
     private IRandomEngine randomEngine;
 
-    public LeaderTrainersProcessor(IFileManager asmFileManager, IFileParser asmFileParser, IRandomEngine randomEngine) {
+    public LeaderTrainersProcessor(IFileManager asmFileManager,
+                                   IFileParser asmFileParser,
+                                   IRandomEngine randomEngine) {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
         this.randomEngine = randomEngine;
     }
 
     public void process(Map<String, Object> gyms) {
-        String filePath = DATA_FILEPATH + "trainer_parties";
-        try {
-            String[] lines = this.asmFileManager.read(filePath);
-            for (Map.Entry<String, Object> entry : gyms.entrySet()) {
-                String city = entry.getKey();
-                Gym gym = (Gym) (gyms.get(city));
-                getTrainers(gym.getName()).forEach((trainerName, trainerOppPosition) -> {
-                    buildAsmTrainerPartiesForTrainers(trainerName, trainerOppPosition, gym.getPokemonRangeLevel(), lines);
-                });
-                buildAsmTrainerPartiesForLeaders(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
-            }
-            String join = join("\n\t", lines);
-            this.asmFileManager.write(filePath, join);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String filePath = DATA_FILEPATH + TRAINER_PARTIES;
+        String[] lines = this.asmFileManager.read(filePath);
+        for (Map.Entry<String, Object> entry : gyms.entrySet()) {
+            String city = entry.getKey();
+            Gym gym = (Gym) (gyms.get(city));
+            getTrainers(gym.getName()).forEach((trainerName, trainerOppPosition) -> {
+                buildAsmTrainerPartiesForTrainers(trainerName, trainerOppPosition, gym.getPokemonRangeLevel(), lines);
+            });
+            buildAsmTrainerPartiesForLeaders(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
         }
+        this.asmFileManager.write(filePath, lines);
     }
 
-    private void buildAsmTrainerPartiesForTrainers(String trainerName, List<Integer> trainerOppPosition, Integer[] pokemonRangeLevel, String[] lines) {
+    private void buildAsmTrainerPartiesForTrainers(String trainerName,
+                                                   List<Integer> trainerOppPosition,
+                                                   Integer[] pokemonRangeLevel,
+                                                   String[] lines) {
         List<String> linesList = asList(lines);
         OptionalInt gymLeaderDataIndex = IntStream.range(0, linesList.size())
                 .filter(i -> linesList.get(i).contains(trainerName + "Data:"))
@@ -64,14 +65,16 @@ public class LeaderTrainersProcessor {
         }
     }
 
-    private void buildAsmTrainerPartiesForLeaders(Leaders leader, Integer[] pokemonRangeLevel, String[] lines) {
+    private void buildAsmTrainerPartiesForLeaders(Leaders leader,
+                                                  Integer[] pokemonRangeLevel,
+                                                  String[] lines) {
         List<String> linesList = asList(lines);
         OptionalInt gymLeaderDataIndex = IntStream.range(0, linesList.size())
                 .filter(i -> linesList.get(i).contains(leader.name() + "Data:"))
                 .findFirst();
 
         int oppFromGymFile = 1;
-        if ("Giovanni".equals(leader.name())) {
+        if (leader.name().equals(Giovanni.name())) {
             oppFromGymFile = 3;
         }
         int GymLeaderIndex = gymLeaderDataIndex.getAsInt() + oppFromGymFile;
@@ -83,13 +86,8 @@ public class LeaderTrainersProcessor {
         }
     }
 
-    public Map<String, List<Integer>> getTrainers(Gyms gymFileName) {
-        String[] gymFile = new String[0];
-        try {
-            gymFile = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymFileName.getName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    protected Map<String, List<Integer>> getTrainers(Gyms gymFileName) {
+        String[] gymFile = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymFileName.getName());
         Map<String, List<Integer>> trainersOpp = new HashMap<>();
         List<String> gymLines = asList(gymFile);
         Object[] trainers = gymLines.stream().filter(s -> s.contains(TRAINER_PREFIX)).toArray();
@@ -99,7 +97,7 @@ public class LeaderTrainersProcessor {
             String trainerLine = (String) trainers[i];
             String[] line = trainerLine.split(",");
             String name = line[line.length - 2].replace(TRAINER_PREFIX, "").trim();
-            String nameCamelCase = WordUtils.capitalize(WordUtils.capitalizeFully(name, new char[]{'_'}).replaceAll("_", ""));
+            String nameCamelCase = convertToCamelCase(name);
 
             Integer opp = Integer.valueOf(line[line.length - 1].trim());
             if (trainersOpp.containsKey(nameCamelCase)) {
@@ -115,5 +113,9 @@ public class LeaderTrainersProcessor {
 
         }
         return trainersOpp;
+    }
+
+    private String convertToCamelCase(String name) {
+        return capitalize(capitalizeFully(name, new char[]{'_'}).replaceAll("_", ""));
     }
 }

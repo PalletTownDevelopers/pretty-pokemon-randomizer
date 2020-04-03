@@ -3,24 +3,23 @@ package com.likeageek.randomizer.shufflers.gym.processors;
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
 import com.likeageek.randomizer.shufflers.gym.entities.Gym;
-import com.likeageek.randomizer.shufflers.gym.entities.Gyms;
-import org.apache.commons.lang.WordUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.String.join;
+import static com.likeageek.randomizer.shufflers.gym.entities.Cities.ViridianCity;
+import static org.apache.commons.lang.WordUtils.capitalize;
+import static org.apache.commons.lang.WordUtils.capitalizeFully;
 
 public class CitiesGymProcessor {
 
-    private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
-    private static final String DATA_FILEPATH = "/data/";
+    private static final String MAP_OBJECTS_FILEPATH = "/data/mapObjects/";
+    private static final String SCRIPTS_FILEPATH = "/scripts/";
 
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
 
-    private Map<String, Integer> cityLineNumber = new HashMap<>() {{
+    private Map<String, Integer> cityGymsLineNumber = new HashMap<>() {{
         put("ViridianCity", 7);
         put("CeladonCity", 9);
         put("VermilionCity", 6);
@@ -59,66 +58,50 @@ public class CitiesGymProcessor {
     }
 
     public void process(Map<String, Object> gyms) {
-        for (Map.Entry<String, Object> entry : gyms.entrySet()) {
-            String city = entry.getKey();
+        gyms.keySet().forEach(city -> {
             Gym gym = (Gym) (gyms.get(city));
             String gymName = gym.getName().toString();
 
-            buildCityAsmFile(city, gymName);
-            buildGymAsmFile(gymName, gym.getWarpId());
-            buildGymAsmScriptFile(gym);
-        }
+            buildCityFileWithNewGym(gymName, city);
+            buildGymFileWithNewWarp(gymName, gym.getWarpId());
+            buildGymScriptFileWithEvent(gymName, gym.getLeaderOld().name());
+        });
     }
 
-    private void buildCityAsmFile(String city, String gymToReplace) {
-        try {
-            String[] lines = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city);
-            String cityFileContent = buildAsmFileCity(city, gymToReplace, lines);
-            this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + city, cityFileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildGymAsmFile(String gym, int warpId) {
-        try {
-            String gymName = Gyms.valueOf(gym).getName();
-            String[] gymLines = this.asmFileManager.read(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName);
-            String gymFileContent = buildAsmFileGym(warpId, gymLines);
-            this.asmFileManager.write(DATA_FILEPATH + MAP_OBJECTS_FILEPATH + gymName, gymFileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildGymAsmScriptFile(Gym gym) {
-        try {
-            String gymCamelCase = WordUtils.capitalize(WordUtils.capitalizeFully(gym.getName().toString(), new char[]{'_'}).replaceAll("_", ""));
-            String[] lines = this.asmFileManager.read("/scripts/" + gymCamelCase);
-            int index = gymSetEventLineNumber.get(gymCamelCase);
-            lines[index] = "SetEvent " + gymLeaderEvents.get(gym.getLeaderOld().name());
-            this.asmFileManager.write("/scripts/" + gymCamelCase, join("\n\t", lines));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String buildAsmFileCity(String cityName, String gymName, String[] lines) {
-        Integer lineNumber = this.cityLineNumber.get(cityName);
-        lines[lineNumber] = this.asmFileParser.editLine(lines[lineNumber], gymName, 4);
-        addNewlineToViridianCity(cityName, lines, lineNumber);
-        return join("\n\t", lines);
+    private void buildCityFileWithNewGym(String gymToReplace, String city) {
+        String cityFilePath = MAP_OBJECTS_FILEPATH + city;
+        String[] cityAsm = this.asmFileManager.read(cityFilePath);
+        Integer gymLineNumber = this.cityGymsLineNumber.get(city);
+        cityAsm[gymLineNumber] = this.asmFileParser.editLine(cityAsm[gymLineNumber], gymToReplace, 4);
+        addNewlineToViridianCity(city, cityAsm, gymLineNumber);
+        this.asmFileManager.write(cityFilePath, cityAsm);
     }
 
     private void addNewlineToViridianCity(String cityName, String[] lines, Integer lineNumber) {
-        if ("ViridianCity".equals(cityName)) {
+        if (cityName.equals(ViridianCity.name())) {
             lines[lineNumber] = lines[lineNumber].concat("\n");
         }
     }
 
-    private String buildAsmFileGym(int warpId, String[] lines) {
-        lines[3] = this.asmFileParser.editLine(lines[3], Integer.toString(warpId), 3);
-        lines[4] = this.asmFileParser.editLine(lines[4], Integer.toString(warpId), 3);
-        return join("\n\t", lines);
+    private void buildGymFileWithNewWarp(String gymName, int warpId) {
+        String gymNameCamelCase = convertToCamelCase(gymName);
+        String gymFilePath = MAP_OBJECTS_FILEPATH + gymNameCamelCase;
+        String[] gymAsm = this.asmFileManager.read(gymFilePath);
+        gymAsm[3] = this.asmFileParser.editLine(gymAsm[3], Integer.toString(warpId), 3);
+        gymAsm[4] = this.asmFileParser.editLine(gymAsm[4], Integer.toString(warpId), 3);
+        this.asmFileManager.write(gymFilePath, gymAsm);
+    }
+
+    private void buildGymScriptFileWithEvent(String gymName, String leaderOldName) {
+        String gymNameCamelCase = convertToCamelCase(gymName);
+        String gymScriptFilePath = SCRIPTS_FILEPATH + gymNameCamelCase;
+        String[] gymScriptAsm = this.asmFileManager.read(gymScriptFilePath);
+        int beatLeaderEventIndex = gymSetEventLineNumber.get(gymNameCamelCase);
+        gymScriptAsm[beatLeaderEventIndex] = "SetEvent " + gymLeaderEvents.get(leaderOldName);
+        this.asmFileManager.write(gymScriptFilePath, gymScriptAsm);
+    }
+
+    private String convertToCamelCase(String gymName) {
+        return capitalize(capitalizeFully(gymName, new char[]{'_'}).replaceAll("_", ""));
     }
 }
