@@ -8,7 +8,8 @@ launchShaker()
     OUTPUT_DIR="$HOME/wd/pokemon/randomizer-output/"
     CACHE_DIR="$HOME/wd/pokemon/randomizer-cache/"
     CODE_DISASSEMBLY="$HOME/wd/pokemon/pokered/"
-    SEED=$RANDOM
+    SEED=14171
+    #SEED=$RANDOM
     SCRIPT_DIR=$(dirname $0)
     echo "Developpement mode"
     echo "output dir = $OUTPUT_DIR"
