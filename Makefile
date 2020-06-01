@@ -8,9 +8,9 @@ SEED := 14171
 SCRIPT_DIR := .
 MAVEN_BUILD := mvn clean compile assembly:single
 
-.PHONY: all dev build initialize shake
+.PHONY: all dev build initialize shake compile
 
-all: initialize build shake
+all: initialize build shake compile
 
 #Build randomizer
 build:
@@ -51,3 +51,9 @@ shake:
       -seed "$(SEED)" \
       -pokemon_dir "$(CACHE_DIR)" \
       -output_dir "$(OUTPUT_DIR)"
+
+#Compile rom
+compile:
+	@echo ""
+	@echo "Compile rom"
+	cd $(OUTPUT_DIR) && $(MAKE)
