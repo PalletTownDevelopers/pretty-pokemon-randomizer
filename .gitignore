@@ -25,6 +25,9 @@ hs_err_pid*
 # ignore target and .idea
 /target/
 /.idea/
+/node_modules/
+yarn.lock
+/src/main/resources/com/likeageek/randomizer/
 *.swp
 .classpath
 .factorypath
