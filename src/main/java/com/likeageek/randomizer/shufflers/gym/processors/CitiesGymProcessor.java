@@ -52,6 +52,17 @@ public class CitiesGymProcessor {
         put("CinnabarGym", 115);
     }};
 
+    private Map<String, Integer> gymCheckEventLineNumber = new HashMap<>() {{
+        put("ViridianGym", 192);
+        put("CeladonGym", 115);
+        put("SaffronGym", 116);
+        put("VermilionGym", 99);
+        put("CeruleanGym", 76);
+        put("PewterGym", 75);
+        put("FuchsiaGym", 110);
+        put("CinnabarGym", 165);
+    }};
+
     public CitiesGymProcessor(IFileManager asmFileManager, IFileParser asmFileParser) {
         this.asmFileManager = asmFileManager;
         this.asmFileParser = asmFileParser;
@@ -96,8 +107,10 @@ public class CitiesGymProcessor {
         String gymNameCamelCase = convertToCamelCase(gymName);
         String gymScriptFilePath = SCRIPTS_FILEPATH + gymNameCamelCase;
         String[] gymScriptAsm = this.asmFileManager.read(gymScriptFilePath);
-        int beatLeaderEventIndex = gymSetEventLineNumber.get(gymNameCamelCase);
-        gymScriptAsm[beatLeaderEventIndex] = "SetEvent " + gymLeaderEvents.get(leaderOldName);
+        int lineBeatLeaderSetEventIndex = gymSetEventLineNumber.get(gymNameCamelCase);
+        int lineBeatLeaderCheckEventIndex = gymCheckEventLineNumber.get(gymNameCamelCase);
+        gymScriptAsm[lineBeatLeaderSetEventIndex] = "SetEvent " + gymLeaderEvents.get(leaderOldName);
+        gymScriptAsm[lineBeatLeaderCheckEventIndex] = "CheckEvent " + gymLeaderEvents.get(leaderOldName);
         this.asmFileManager.write(gymScriptFilePath, gymScriptAsm);
     }
 

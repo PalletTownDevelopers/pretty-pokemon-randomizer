@@ -27,7 +27,9 @@ hs_err_pid*
 /.idea/
 /node_modules/
 yarn.lock
-/src/main/resources/com/likeageek/randomizer/
+/src/main/resources/com/likeageek/randomizer/mapObjects/
+/src/main/resources/com/likeageek/randomizer/scripts/
+/src/main/resources/com/likeageek/randomizer/application.properties
 *.swp
 .classpath
 .factorypath
