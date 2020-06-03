@@ -17,11 +17,9 @@ import static org.apache.commons.lang.WordUtils.capitalizeFully;
 
 public class LeaderTrainersProcessor {
     private static final String DATA_FILEPATH = "/data/";
-    private static final String ENGINE_FILEPATH = "/engine/";
     private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
     private static final String TRAINER_PREFIX = "OPP_";
     private static final String TRAINER_PARTIES = "trainer_parties";
-    private static final String START_SUB_MENU = "menu/start_sub_menus";
 
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;
@@ -47,8 +45,6 @@ public class LeaderTrainersProcessor {
             buildAsmTrainerPartiesForLeaders(gym.getLeader(), gym.getPokemonRangeLevel(), lines);
         }
         this.asmFileManager.write(filePath, lines);
-
-        disableCheckHM();
     }
 
     private void buildAsmTrainerPartiesForTrainers(String trainerName,
@@ -67,33 +63,6 @@ public class LeaderTrainersProcessor {
             Object pokemonLevel = randomEngine.randomBetweenRangeValues(asList(pokemonRangeLevel));
             lines[GymLeaderIndex] = this.asmFileParser.editLine(lines[GymLeaderIndex], String.valueOf(pokemonLevel), position);
         }
-    }
-
-    private void disableCheckHM() {
-        String filePath = ENGINE_FILEPATH + START_SUB_MENU;
-        String[] lines = this.asmFileManager.read(filePath);
-
-        //Disable check for fly HM
-        lines[118] = ";" + lines[118];
-        lines[119] = ";" + lines[119];
-
-        //Disable check for cut HM
-        lines[136] = ";" + lines[136];
-        lines[137] = ";" + lines[137];
-
-        //Disable check for surf HM
-        lines[143] = ";" + lines[143];
-        lines[144] = ";" + lines[144];
-
-        //Disable check for strength HM
-        lines[159] = ";" + lines[159];
-        lines[160] = ";" + lines[160];
-
-        //Disable check for flash HM
-        lines[164] = ";" + lines[164];
-        lines[165] = ";" + lines[165];
-
-        this.asmFileManager.write(filePath, lines);
     }
 
     private void buildAsmTrainerPartiesForLeaders(Leaders leader,

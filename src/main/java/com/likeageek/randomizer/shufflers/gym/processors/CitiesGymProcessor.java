@@ -2,7 +2,9 @@ package com.likeageek.randomizer.shufflers.gym.processors;
 
 import com.likeageek.randomizer.IFileManager;
 import com.likeageek.randomizer.IFileParser;
+import com.likeageek.randomizer.shufflers.gym.entities.GymEvent;
 import com.likeageek.randomizer.shufflers.gym.entities.Gym;
+import com.likeageek.randomizer.shufflers.gym.entities.GymLeaderEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,37 +32,26 @@ public class CitiesGymProcessor {
         put("CinnabarIsland", 4);
     }};
 
-    private Map<String, String> gymLeaderEvents = new HashMap<>() {{
-        put("Brock", "EVENT_BEAT_BROCK");
-        put("Misty", "EVENT_BEAT_MISTY");
-        put("LtSurge", "EVENT_BEAT_LT_SURGE");
-        put("Erika", "EVENT_BEAT_ERIKA");
-        put("Koga", "EVENT_BEAT_KOGA");
-        put("Sabrina", "EVENT_BEAT_SABRINA");
-        put("Blaine", "EVENT_BEAT_BLAINE");
-        put("Giovanni", "EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI");
+    private Map<String, GymLeaderEvent> listGymLeaderEvent = new HashMap<>() {{
+        put("Brock", new GymLeaderEvent().setEvent("EVENT_BEAT_BROCK").setBadge(0));
+        put("Misty", new GymLeaderEvent().setEvent("EVENT_BEAT_MISTY").setBadge(1));
+        put("LtSurge", new GymLeaderEvent().setEvent("EVENT_BEAT_LT_SURGE").setBadge(2));
+        put("Erika", new GymLeaderEvent().setEvent("EVENT_BEAT_ERIKA").setBadge(3));
+        put("Koga", new GymLeaderEvent().setEvent("EVENT_BEAT_KOGA").setBadge(4));
+        put("Sabrina", new GymLeaderEvent().setEvent("EVENT_BEAT_SABRINA").setBadge(5));
+        put("Blaine", new GymLeaderEvent().setEvent("EVENT_BEAT_BLAINE").setBadge(6));
+        put("Giovanni", new GymLeaderEvent().setEvent("EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI").setBadge(7));
     }};
 
-    private Map<String, Integer> gymSetEventLineNumber = new HashMap<>() {{
-        put("ViridianGym", 97);
-        put("CeladonGym", 34);
-        put("SaffronGym", 34);
-        put("VermilionGym", 49);
-        put("CeruleanGym", 34);
-        put("PewterGym", 34);
-        put("FuchsiaGym", 36);
-        put("CinnabarGym", 115);
-    }};
-
-    private Map<String, Integer> gymCheckEventLineNumber = new HashMap<>() {{
-        put("ViridianGym", 192);
-        put("CeladonGym", 115);
-        put("SaffronGym", 116);
-        put("VermilionGym", 99);
-        put("CeruleanGym", 76);
-        put("PewterGym", 75);
-        put("FuchsiaGym", 110);
-        put("CinnabarGym", 165);
+    private Map<String, GymEvent> listGymEvent = new HashMap<>() {{
+        put("ViridianGym", new GymEvent().setLinesSetEvents(new Integer[]{97}).setLinesCheckEvents(new Integer[]{192,325}).setBadgeNumber(7).setLinesBadge(new Integer[]{110,112}));
+        put("CeladonGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{115}).setBadgeNumber(3).setLinesBadge(new Integer[]{47,49}));
+        put("SaffronGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{116,188}).setBadgeNumber(5).setLinesBadge(new Integer[]{47,49}));
+        put("VermilionGym", new GymEvent().setLinesSetEvents(new Integer[]{49}).setLinesCheckEvents(new Integer[]{99}).setBadgeNumber(2).setLinesBadge(new Integer[]{62,64}));
+        put("CeruleanGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{76,141}).setBadgeNumber(1).setLinesBadge(new Integer[]{47,49}));
+        put("PewterGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{75}).setBadgeNumber(0).setLinesBadge(new Integer[]{47,49}));
+        put("FuchsiaGym", new GymEvent().setLinesSetEvents(new Integer[]{36}).setLinesCheckEvents(new Integer[]{110,214}).setBadgeNumber(4).setLinesBadge(new Integer[]{49,51}));
+        put("CinnabarGym", new GymEvent().setLinesSetEvents(new Integer[]{115}).setLinesCheckEvents(new Integer[]{165,333}).setBadgeNumber(6).setLinesBadge(new Integer[]{128,130}));
     }};
 
     public CitiesGymProcessor(IFileManager asmFileManager, IFileParser asmFileParser) {
@@ -107,10 +98,19 @@ public class CitiesGymProcessor {
         String gymNameCamelCase = convertToCamelCase(gymName);
         String gymScriptFilePath = SCRIPTS_FILEPATH + gymNameCamelCase;
         String[] gymScriptAsm = this.asmFileManager.read(gymScriptFilePath);
-        int lineBeatLeaderSetEventIndex = gymSetEventLineNumber.get(gymNameCamelCase);
-        int lineBeatLeaderCheckEventIndex = gymCheckEventLineNumber.get(gymNameCamelCase);
-        gymScriptAsm[lineBeatLeaderSetEventIndex] = "SetEvent " + gymLeaderEvents.get(leaderOldName);
-        gymScriptAsm[lineBeatLeaderCheckEventIndex] = "CheckEvent " + gymLeaderEvents.get(leaderOldName);
+
+        for(Integer lineSetEvent : listGymEvent.get(gymNameCamelCase).getLinesSetEvents()) {
+            gymScriptAsm[lineSetEvent] = "SetEvent " + listGymLeaderEvent.get(leaderOldName).getEvent();
+        }
+
+        for(Integer lineCheckEvent : listGymEvent.get(gymNameCamelCase).getLinesCheckEvents()) {
+            gymScriptAsm[lineCheckEvent] = "CheckEvent " + listGymLeaderEvent.get(leaderOldName).getEvent();
+        }
+
+        for(Integer lineBadge : listGymEvent.get(gymNameCamelCase).getLinesBadge()) {
+            gymScriptAsm[lineBadge] = "set " + listGymLeaderEvent.get(leaderOldName).getBadge() + ", [hl]";
+        }
+
         this.asmFileManager.write(gymScriptFilePath, gymScriptAsm);
     }
 
