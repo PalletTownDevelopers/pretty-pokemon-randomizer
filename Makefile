@@ -55,5 +55,11 @@ shake:
 #Compile rom
 compile:
 	@echo ""
+	@echo "Copy the new CeladonGym map"
+	rm $(OUTPUT_DIR)maps/CeladonGym.blk
+	cp $(SCRIPT_DIR)/CeladonGym.blk $(OUTPUT_DIR)maps/CeladonGym.blk
+	@echo ""
+	@echo "Copy finished"
+	@echo ""
 	@echo "Compile rom"
 	cd $(OUTPUT_DIR) && $(MAKE)
