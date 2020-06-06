@@ -155,10 +155,9 @@ ViridianGymScript3_74995:
 	call DisplayTextID
 .asm_749be
 	ld hl, wObtainedBadges
-	set 7, [hl]
+	set 1, [hl]
 	ld hl, wBeatGymFlags
-	set 7, [hl]
-
+	set 1, [hl]
 	; deactivate gym trainers
 	SetEventRange EVENT_BEAT_VIRIDIAN_GYM_TRAINER_0, EVENT_BEAT_VIRIDIAN_GYM_TRAINER_7
 
@@ -260,7 +259,7 @@ ViridianGymTrainerHeader7:
 
 ViridianGymText1:
 	TX_ASM
-	CheckEvent EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI
+	CheckEvent EVENT_BEAT_MISTY
 	jr z, .asm_6de66
 	CheckEventReuseA EVENT_GOT_TM27
 	jr nz, .asm_9fc95
@@ -476,7 +475,7 @@ ViridianGymAfterBattleText8:
 
 ViridianGymText10:
 	TX_ASM
-	CheckEvent EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI
+	CheckEvent EVENT_BEAT_MISTY
 	jr nz, .asm_1abd1
 	ld hl, ViridianGymText_74bd4
 	call PrintText

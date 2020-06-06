@@ -83,7 +83,7 @@ public class GymShufflerTest {
 
             String expectedGymScriptAsmFile = new String(readAllBytes(get(getClass().getResource("../scripts/" + gymName + "-shuffled.txt").toURI())));
             String gymScriptAsmFile = new String(readAllBytes(get(outputPath + "scripts/" + gymName + ".asm")));
-            assertThat(gymScriptAsmFile).isEqualTo(expectedGymScriptAsmFile);
+            assertThat(gymScriptAsmFile).isEqualToIgnoringNewLines(expectedGymScriptAsmFile);
         }
 
         String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/trainer_parties-shuffled.txt").toURI())));
