@@ -41,8 +41,12 @@ yarn.lock
 /ui/package-lock.json
 /ui/.tern-project
 /ui/yarn.lock
+/ui/tmp/randomizer-cache/
+/ui/tmp/randomizer-output/
+/ui/tmp/pokered/
 /vendor/
 /randomizer.iml
 /stale_outputs_checked
+/ui/*.jar
 *.iml
 .DS_STORE
