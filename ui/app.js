@@ -20,7 +20,15 @@ router.post('/generate', (req, res) => {
     let randomizerCache = __dirname + '/tmp/randomizer-cache'
     let codeDisassembly = __dirname + '/tmp/pokered/'
 
-    let commandRandomizer = 'sh run.sh ' + randomizerOutput + ' ' + randomizerCache + ' ' + codeDisassembly + ' ' + seed
+    exec('rm -Rf ' + randomizerOutput)
+    exec('mkdir -pv ' + randomizerOutput)
+    exec('chmod -Rf 777 ' + randomizerOutput)
+
+    exec('rm -Rf ' + randomizerCache)
+    exec('mkdir -pv ' + randomizerCache)
+    exec('cp -r ' + codeDisassembly + '* ' + randomizerCache)
+
+    let commandRandomizer = 'java -jar "' + __dirname + '/randomizer.jar" -shake -seed ' + seed + ' -pokemon_dir "' + randomizerCache + '" -output_dir "' + randomizerOutput + '"'
     let processRandomizer = exec(commandRandomizer)
     console.log(commandRandomizer)
 
