@@ -3,10 +3,13 @@ const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
 const router = express.Router()
+
+// Require the dependency
+const execSync = require('child_process').execSync
 const exec = require('child_process').exec
 
 app.use(express.static(__dirname+'/public'))
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname+'/public/index.html'))
@@ -14,37 +17,27 @@ router.get('/', (req, res) => {
 
 router.post('/generate', (req, res) => {
     let params = req.body
-    
     let seed = params.seed
-    let randomizerOutput = __dirname + '/tmp/randomizer-output'
-    let randomizerCache = __dirname + '/tmp/randomizer-cache'
+    let timestamp = params.timestamp
+    let randomizerOutput = __dirname + '/tmp/randomizer-output_' + timestamp
+    let randomizerCache = __dirname + '/tmp/randomizer-cache_' + timestamp
     let codeDisassembly = __dirname + '/tmp/pokered/'
 
-    exec('rm -Rf ' + randomizerOutput)
-    exec('mkdir -pv ' + randomizerOutput)
-    exec('chmod -Rf 777 ' + randomizerOutput)
 
-    exec('rm -Rf ' + randomizerCache)
-    exec('mkdir -pv ' + randomizerCache)
-    exec('cp -r ' + codeDisassembly + '* ' + randomizerCache)
+    execSync('mkdir -pv ' + randomizerOutput)
+    execSync('chmod -Rf 777 ' + randomizerOutput)
+
+    execSync('mkdir -pv ' + randomizerCache)
+    execSync('cp -r ' + codeDisassembly + '* ' + randomizerCache)
 
     let commandRandomizer = 'java -jar "' + __dirname + '/randomizer.jar" -shake -seed ' + seed + ' -pokemon_dir "' + randomizerCache + '" -output_dir "' + randomizerOutput + '"'
-    let processRandomizer = exec(commandRandomizer)
-    console.log(commandRandomizer)
+    execSync(commandRandomizer)
 
-    processRandomizer.stdout.on('data', (data) => {
-        console.log('stdout: ' + data.toString())
-    })
-
-    processRandomizer.stderr.on('data', (data) => {
-        console.log('stderr: ' + data.toString())
-    })
-
-    processRandomizer.on('exit', (code) => {
-        console.log('child process exited with code ' + code.toString())
-    })
-
-    res.sendFile(path.join(__dirname+'/public/index.html'))
+    let nameRom = 'public/pokered_' + timestamp + '.gbc'
+    execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
+    exec('rm -Rf ' + randomizerOutput)
+    exec('rm -Rf ' + randomizerCache)
+    res.download(nameRom)
 })
 
 app.use('/',router)

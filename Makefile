@@ -16,6 +16,7 @@ all: initialize build shake compile
 build:
 	@echo "Build randomizer"
 	$(MAVEN_BUILD)
+	cp -f target/randomizer* ui/randomizer.jar
 	@echo "randomizer's build finished"
 
 #Initialize randomizer's directories
