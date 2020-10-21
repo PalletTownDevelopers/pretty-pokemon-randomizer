@@ -15,7 +15,7 @@ import static org.apache.commons.lang.WordUtils.capitalizeFully;
 
 public class CitiesGymProcessor {
 
-    private static final String MAP_OBJECTS_FILEPATH = "/data/mapObjects/";
+    private static final String MAP_OBJECTS_FILEPATH = "/data/maps/objects/";
     private static final String SCRIPTS_FILEPATH = "/scripts/";
 
     private IFileManager asmFileManager;
@@ -44,13 +44,13 @@ public class CitiesGymProcessor {
     }};
 
     private Map<String, GymEvent> listGymEvent = new HashMap<>() {{
-        put("ViridianGym", new GymEvent().setLinesSetEvents(new Integer[]{97}).setLinesCheckEvents(new Integer[]{192,325}).setBadgeNumber(7).setLinesBadge(new Integer[]{110,112}));
-        put("CeladonGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{115}).setBadgeNumber(3).setLinesBadge(new Integer[]{47,49}));
-        put("SaffronGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{116,188}).setBadgeNumber(5).setLinesBadge(new Integer[]{47,49}));
-        put("VermilionGym", new GymEvent().setLinesSetEvents(new Integer[]{49}).setLinesCheckEvents(new Integer[]{99}).setBadgeNumber(2).setLinesBadge(new Integer[]{62,64}));
-        put("CeruleanGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{76,141}).setBadgeNumber(1).setLinesBadge(new Integer[]{47,49}));
-        put("PewterGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{75}).setBadgeNumber(0).setLinesBadge(new Integer[]{47,49}));
-        put("FuchsiaGym", new GymEvent().setLinesSetEvents(new Integer[]{36}).setLinesCheckEvents(new Integer[]{110,214}).setBadgeNumber(4).setLinesBadge(new Integer[]{49,51}));
+        put("ViridianGym", new GymEvent().setLinesSetEvents(new Integer[]{97}).setLinesCheckEvents(new Integer[]{144,277}).setBadgeNumber(7).setLinesBadge(new Integer[]{110,112}));
+        put("CeladonGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{73}).setBadgeNumber(3).setLinesBadge(new Integer[]{47,49}));
+        put("SaffronGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{74,146}).setBadgeNumber(5).setLinesBadge(new Integer[]{47,49}));
+        put("VermilionGym", new GymEvent().setLinesSetEvents(new Integer[]{49}).setLinesCheckEvents(new Integer[]{81}).setBadgeNumber(2).setLinesBadge(new Integer[]{62,64}));
+        put("CeruleanGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{64,129}).setBadgeNumber(1).setLinesBadge(new Integer[]{47,49}));
+        put("PewterGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{69}).setBadgeNumber(0).setLinesBadge(new Integer[]{47,49}));
+        put("FuchsiaGym", new GymEvent().setLinesSetEvents(new Integer[]{36}).setLinesCheckEvents(new Integer[]{74,178}).setBadgeNumber(4).setLinesBadge(new Integer[]{49,51}));
         put("CinnabarGym", new GymEvent().setLinesSetEvents(new Integer[]{115}).setLinesCheckEvents(new Integer[]{165,333}).setBadgeNumber(6).setLinesBadge(new Integer[]{128,130}));
     }};
 

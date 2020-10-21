@@ -17,9 +17,9 @@ import static org.apache.commons.lang.WordUtils.capitalizeFully;
 
 public class LeaderTrainersProcessor {
     private static final String DATA_FILEPATH = "/data/";
-    private static final String MAP_OBJECTS_FILEPATH = "mapObjects/";
+    private static final String MAP_OBJECTS_FILEPATH = "maps/objects/";
     private static final String TRAINER_PREFIX = "OPP_";
-    private static final String TRAINER_PARTIES = "trainer_parties";
+    private static final String TRAINER_PARTIES = "trainers/parties";
 
     private IFileManager asmFileManager;
     private IFileParser asmFileParser;

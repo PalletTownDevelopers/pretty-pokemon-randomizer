@@ -5,7 +5,6 @@ import com.likeageek.randomizer.FakeAsmFileManager;
 import com.likeageek.randomizer.RandomEngine;
 import com.likeageek.randomizer.shufflers.gym.entities.Gym;
 import com.likeageek.randomizer.shufflers.gym.GymShuffler;
-import com.likeageek.randomizer.shufflers.gym.entities.Leaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,50 +34,44 @@ public class GymShufflerTest {
     public void shouldProcessGymsWithWarpID() throws URISyntaxException, IOException {
         Map<String, Object> cities = new HashMap<>();
         Integer[] viridianRangeLevel = {42, 50};
-        int viridianWarpId = 4;
-        Leaders celadonGymLeader = Erika;
         cities.put("ViridianCity", gym()
-                .warpId(viridianWarpId)
+                .warpId(4)
                 .leaderOld(Giovanni)
                 .pokemonRangeLevel(viridianRangeLevel)
                 .name(CELADON_GYM)
-                .leader(celadonGymLeader)
+                .leader(Erika)
                 .build());
 
         Integer[] pewterRangeLevel = {12, 14};
-        int pewterWarpId = 2;
-        Leaders saffronGymLeader = Sabrina;
         cities.put("PewterCity", gym()
-                .warpId(pewterWarpId)
+                .warpId(2)
                 .leaderOld(Brock)
                 .pokemonRangeLevel(pewterRangeLevel)
                 .name(SAFFRON_GYM)
-                .leader(saffronGymLeader).build());
+                .leader(Sabrina).build());
 
         Integer[] ceruleanRangeLevel = {24, 29};
-        int ceruleanWarpId = 3;
-        Leaders viridianGymLeader = Giovanni;
         cities.put("CeruleanCity", gym()
-                .warpId(ceruleanWarpId)
+                .warpId(3)
                 .leaderOld(Misty)
                 .pokemonRangeLevel(ceruleanRangeLevel)
                 .name(VIRIDIAN_GYM)
-                .leader(viridianGymLeader).build());
+                .leader(Giovanni).build());
 
         gymShuffler.process(cities);
 
-        String outputPath = "/home/likeageek/Projects/randomizer-output/";
+        String outputPath = System.getProperty("user.home") + "/Projects/randomizer-output/";
 
         for (Map.Entry<String, Object> entry : cities.entrySet()) {
             String cityName = entry.getKey();
             Object gym = entry.getValue();
-            String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/" + cityName + "-shuffled.txt").toURI())));
-            String cityAsmFile = new String(readAllBytes(get(outputPath + "data/mapObjects/" + cityName + ".asm")));
+            String expectedCityAsmFile = new String(readAllBytes(get(getClass().getResource("../maps/objects/" + cityName + "-shuffled.txt").toURI())));
+            String cityAsmFile = new String(readAllBytes(get(outputPath + "data/maps/objects/" + cityName + ".asm")));
             assertThat(cityAsmFile).isEqualTo(expectedCityAsmFile);
 
             String gymName = ((Gym) gym).getName().getName();
-            String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/" + gymName + "-shuffled.txt").toURI())));
-            String gymAsmFile = new String(readAllBytes(get(outputPath + "data/mapObjects/" + gymName + ".asm")));
+            String expectedGymAsmFile = new String(readAllBytes(get(getClass().getResource("../maps/objects/" + gymName + "-shuffled.txt").toURI())));
+            String gymAsmFile = new String(readAllBytes(get(outputPath + "data/maps/objects/" + gymName + ".asm")));
             assertThat(gymAsmFile).isEqualTo(expectedGymAsmFile);
 
             String expectedGymScriptAsmFile = new String(readAllBytes(get(getClass().getResource("../scripts/" + gymName + "-shuffled.txt").toURI())));
@@ -86,8 +79,8 @@ public class GymShufflerTest {
             assertThat(gymScriptAsmFile).isEqualToIgnoringNewLines(expectedGymScriptAsmFile);
         }
 
-        String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../mapObjects/trainer_parties-shuffled.txt").toURI())));
-        String trainerPartiesAsmFile = new String(readAllBytes(get(outputPath + "data/trainer_parties.asm")));
+        String expectedTrainerPartiesAsmFile = new String(readAllBytes(get(getClass().getResource("../maps/objects/trainer_parties-shuffled.txt").toURI())));
+        String trainerPartiesAsmFile = new String(readAllBytes(get(outputPath + "data/trainers/parties.asm")));
         assertThat(trainerPartiesAsmFile).isEqualTo(expectedTrainerPartiesAsmFile);
     }
 
@@ -95,11 +88,10 @@ public class GymShufflerTest {
     public void shouldShuffleGyms() {
         Integer[] viridianRangeLevel = {42, 50};
         int viridianWarpId = 4;
-        Leaders celadonTrainer = Erika;
 
         Map<String, Object> gyms = gymShuffler.shuffle();
 
-        Gym newViridianGym = gym().warpId(viridianWarpId).leader(celadonTrainer).leaderOld(Giovanni).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
+        Gym newViridianGym = gym().warpId(viridianWarpId).leader(Erika).leaderOld(Giovanni).pokemonRangeLevel(viridianRangeLevel).name(CELADON_GYM).build();
         assertThat(gyms.get("ViridianCity")).isEqualToComparingFieldByField(newViridianGym);
     }
 }

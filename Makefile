@@ -33,16 +33,13 @@ initialize:
 	@rm -Rf $(OUTPUT_DIR)
 	@mkdir -pv $(OUTPUT_DIR)
 
-#We add permissions to use tools to help compilation
-	@chmod -Rf 777 $(OUTPUT_DIR)
-
 #Initialize Cache directory
 	@echo "Initialize cache directory"
 	@rm -Rf $(CACHE_DIR)
 	@cp -r $(CODE_DISASSEMBLY) $(CACHE_DIR)
 	@echo ""
 
-#Launch shakker
+#Launch shaker
 shake:
 	@echo ""
 	@echo "Launch shaker"
@@ -62,4 +59,4 @@ compile:
 	@echo "Copy finished"
 	@echo ""
 	@echo "Compile rom"
-	cd $(OUTPUT_DIR) && $(MAKE)
+	cd $(OUTPUT_DIR) && chmod -Rf 777 . && $(MAKE)
