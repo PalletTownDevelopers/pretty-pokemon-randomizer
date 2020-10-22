@@ -33,6 +33,11 @@ router.post('/generate', (req, res) => {
     let commandRandomizer = 'java -jar "' + __dirname + '/randomizer.jar" -shake -seed ' + seed + ' -pokemon_dir "' + randomizerCache + '" -output_dir "' + randomizerOutput + '"'
     execSync(commandRandomizer)
 
+    execSync('rm ' + randomizerOutput + '/maps/CeladonGym.blk')
+    execSync('cp CeladonGym.blk ' + randomizerOutput + '/maps/CeladonGym.blk')
+
+    execSync('cd ' + randomizerOutput + ' && chmod -Rf 777 . && make')
+
     let nameRom = 'public/pokered_' + timestamp + '.gbc'
     execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
     exec('rm -Rf ' + randomizerOutput)
