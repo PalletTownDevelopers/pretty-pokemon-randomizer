@@ -49,5 +49,7 @@ yarn.lock
 /randomizer.iml
 /stale_outputs_checked
 /ui/*.jar
+/ui/public/css/style.css.map
+/ui/public/css/webfonts/
 *.iml
 .DS_STORE
