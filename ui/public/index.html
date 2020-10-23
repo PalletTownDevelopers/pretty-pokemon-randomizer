@@ -12,6 +12,16 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
             </nav>
         </header>
         <div class="container">
@@ -21,9 +31,10 @@
                         <fieldset class="col-md-12">
                             <legend>Options</legend>
                             <div class="form-group row">
-                                <label class="col-sm-1 col-form-label">Seed : </label>
-                                <div class="col-sm-4">
-                                    <input type="text" name="seed" id="seed" class="form-control form-control-sm border" placeholder="Seed"/>
+                                <label class="col-sm-1 col-form-label align-top d-inline-block pb-1">Seed : </label>
+                                <div class="col-sm-5 align-bottom">
+                                    <input type="text" name="seed" id="seed" class="w-50 mr-2 form-control form-control-sm border d-inline-block" placeholder="Seed"/>
+                                    <input id="button-generate-seed" type="button" value="Generate seed" class="btn btn-sm btn-info d-inline-block">
                                 </div>
                             </div>
                         </fieldset>
@@ -33,6 +44,9 @@
         </div>
     </body>
     <script type="text/javascript">
+        document.querySelector("#button-generate-seed").addEventListener('click',() => {
+            document.querySelector("#seed").value = Math.ceil(Math.random() * 100000)
+        })
         document.querySelector("#send-settings").addEventListener('click',() => {
             let timestamp = Date.now()
             if(!document.querySelector("#seed").value.length || !Number.isInteger(parseInt(document.querySelector("#seed").value))) {
