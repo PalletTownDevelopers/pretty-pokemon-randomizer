@@ -1,0 +1,4 @@
+CREATE TABLE stat_option (
+    id SERIAL NOT NULL PRIMARY KEY,
+    info JSON NOT NULL
+)

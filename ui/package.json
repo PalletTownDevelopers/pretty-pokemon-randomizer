@@ -19,6 +19,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "load-grunt-tasks": "^5.1.0",
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.12.0",
+    "pg": "^8.4.2"
   }
 }
