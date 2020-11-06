@@ -3,10 +3,18 @@ const bodyParser = require('body-parser')
 const app = express()
 const path = require('path')
 const router = express.Router()
+const {Client} = require('pg')
 
 // Require the dependency
 const execSync = require('child_process').execSync
 const exec = require('child_process').exec
+const client = new Client({
+    user: 'randomizer',
+    host: 'localhost',
+    database: 'randomizer',
+    password: 'toto',
+    port: 5432,
+})
 
 app.use(express.static(__dirname+'/public'))
 app.use(bodyParser.json())
@@ -16,6 +24,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/generate', (req, res) => {
+    client.connect()
     let params = req.body
     let seed = params.seed
     let timestamp = params.timestamp
@@ -42,6 +51,14 @@ router.post('/generate', (req, res) => {
     execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
     exec('rm -Rf ' + randomizerOutput)
     exec('rm -Rf ' + randomizerCache)
+    query = "INSERT INTO stat_option (seed, info) VALUES(" + seed + ",'" +JSON.stringify(params)+"')"
+    client.query(query)
+        .catch(err => {
+            console.log(err)
+        })
+        .finally(() => {
+            client.end()
+        })
     res.download(nameRom)
 })
 
