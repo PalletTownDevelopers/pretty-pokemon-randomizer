@@ -4,8 +4,9 @@
 1. Install the last version of java
 2. Install node and npm
 3. Install Maven` for packages management
-
 4. Clone pokered and copy this into ui/tmp
+5. Rename the ui/config/config.example.json to ui/config/config.json
+6. In config.json, put the correct configuration for postgres database
 ```
 git clone https://github.com/pret/pokered.git ~/wd/pokemon/pokered
 cp -r ~/wd/pokemon/pokered ui/tmp/
@@ -16,6 +17,8 @@ Into ui direction to install web dependencies
 ```
 make
 ```
+Build and run the docker of db with correct configuration
+
 
 ### Execute CLI
 ```
