@@ -51,5 +51,6 @@ yarn.lock
 /ui/*.jar
 /ui/public/css/style.css.map
 /ui/public/css/webfonts/
+/ui/config/config.json
 *.iml
 .DS_STORE

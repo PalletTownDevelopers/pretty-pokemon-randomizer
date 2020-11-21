@@ -4,17 +4,12 @@ const app = express()
 const path = require('path')
 const router = express.Router()
 const {Client} = require('pg')
+const config = require('./config/config')
 
 // Require the dependency
 const execSync = require('child_process').execSync
 const exec = require('child_process').exec
-const client = new Client({
-    user: 'randomizer',
-    host: 'localhost',
-    database: 'randomizer',
-    password: 'toto',
-    port: 5432,
-})
+const client = new Client(config)
 
 app.use(express.static(__dirname+'/public'))
 app.use(bodyParser.json())
