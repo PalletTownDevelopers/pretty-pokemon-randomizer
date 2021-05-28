@@ -46,7 +46,7 @@ router.post('/generate', (req, res) => {
     execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
     exec('rm -Rf ' + randomizerOutput)
     exec('rm -Rf ' + randomizerCache)
-    query = "INSERT INTO stat_option (seed, info) VALUES(" + seed + ",'" +JSON.stringify(params)+"')"
+    let query = "INSERT INTO stat_option (seed, info) VALUES(" + seed + ",'" + JSON.stringify(params) + "')"
     client.query(query)
         .catch(err => {
             console.log(err)
