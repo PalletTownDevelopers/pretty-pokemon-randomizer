@@ -24,6 +24,26 @@ Build and run the docker of db with correct configuration
 ```
 make
 ```
+
+### Create data folder for DB in ui
+```
+mkdir ./ui/data
+```
+
+### Copy file config.example to config and put correct configuration for DB
+````
+cp config.example.json config.json
+````
+
+### Launch DB with docker-compose
+```
+docker-compose up -d
+```
+
+### You want to look log of DB
+```
+docker-compose logs -f
+```
     
 ### Execute website
 ```
