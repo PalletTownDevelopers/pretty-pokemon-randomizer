@@ -10,16 +10,16 @@ const config = require('./config/config')
 const execSync = require('child_process').execSync
 const exec = require('child_process').exec
 const client = new Client(config)
+client.connect()
 
 app.use(express.static(__dirname+'/public'))
 app.use(bodyParser.json())
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/index.html'))
+    res.sendFile(path.join(path.__dirname+'/public/index.html'))
 })
 
 router.post('/generate', (req, res) => {
-    client.connect()
     let params = req.body
     let seed = params.seed
     let timestamp = params.timestamp
@@ -42,7 +42,7 @@ router.post('/generate', (req, res) => {
 
     execSync('cd ' + randomizerOutput + ' && chmod -Rf 777 . && make')
 
-    let nameRom = 'public/pokered_' + timestamp + '.gbc'
+    let nameRom = __dirname + '/public/pokered_' + timestamp + '.gbc'
     execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
     exec('rm -Rf ' + randomizerOutput)
     exec('rm -Rf ' + randomizerCache)
