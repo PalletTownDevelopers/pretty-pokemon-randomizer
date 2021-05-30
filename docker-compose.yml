@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: db_pretty_randomizer
+    image: postgres
+    environment:
+      POSTGRES_USER: "randomizer"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "randomizer"
+      PGDATA: /data/postgres
+    volumes:
+      - ./ui/data:/data/postgres
+      - ./ui/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - rando
+    restart: unless-stopped
+  web:
+    container_name: randomizer
+    build: .
+    depends_on:
+      - postgres
+    networks:
+      - rando
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+networks:
+  rando:
+    driver: bridge

@@ -51,7 +51,7 @@ yarn.lock
 /ui/public/css/style.css.map
 /ui/public/css/webfonts/
 /ui/config/config.json
-/ui/docker-compose.yml
+/docker-compose.yml
 /ui/data/
 *.iml
 .DS_STORE
