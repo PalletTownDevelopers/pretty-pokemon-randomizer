@@ -2,7 +2,7 @@ package com.likeageek.randomizer.shufflers.gym.entities;
 
 public class GymLeaderEvent {
     private String event;
-    private Integer badge;
+    private String badge;
 
     public String getEvent() {
         return event;
@@ -13,11 +13,11 @@ public class GymLeaderEvent {
         return this;
     }
 
-    public Integer getBadge() {
+    public String getBadge() {
         return badge;
     }
 
-    public GymLeaderEvent setBadge(Integer badge) {
+    public GymLeaderEvent setBadge(String badge) {
         this.badge = badge;
         return this;
     }

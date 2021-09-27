@@ -23,15 +23,15 @@ public class GymEvent {
         return this;
     }
 
-    Integer badgeNumber;
+    String badge;
     Integer[] linesBadge;
 
-    public Integer getBadgeNumber() {
-        return badgeNumber;
+    public String getBadge() {
+        return badge;
     }
 
-    public GymEvent setBadgeNumber(Integer badgeNumber) {
-        this.badgeNumber = badgeNumber;
+    public GymEvent setBadge(String badge) {
+        this.badge = badge;
         return this;
     }
 

@@ -33,25 +33,25 @@ public class CitiesGymProcessor {
     }};
 
     private Map<String, GymLeaderEvent> listGymLeaderEvent = new HashMap<>() {{
-        put("Brock", new GymLeaderEvent().setEvent("EVENT_BEAT_BROCK").setBadge(0));
-        put("Misty", new GymLeaderEvent().setEvent("EVENT_BEAT_MISTY").setBadge(1));
-        put("LtSurge", new GymLeaderEvent().setEvent("EVENT_BEAT_LT_SURGE").setBadge(2));
-        put("Erika", new GymLeaderEvent().setEvent("EVENT_BEAT_ERIKA").setBadge(3));
-        put("Koga", new GymLeaderEvent().setEvent("EVENT_BEAT_KOGA").setBadge(4));
-        put("Sabrina", new GymLeaderEvent().setEvent("EVENT_BEAT_SABRINA").setBadge(5));
-        put("Blaine", new GymLeaderEvent().setEvent("EVENT_BEAT_BLAINE").setBadge(6));
-        put("Giovanni", new GymLeaderEvent().setEvent("EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI").setBadge(7));
+        put("Brock", new GymLeaderEvent().setEvent("EVENT_BEAT_BROCK").setBadge("BIT_BOULDERBADGE"));
+        put("Misty", new GymLeaderEvent().setEvent("EVENT_BEAT_MISTY").setBadge("BIT_CASCADEBADGE"));
+        put("LtSurge", new GymLeaderEvent().setEvent("EVENT_BEAT_LT_SURGE").setBadge("BIT_THUNDERBADGE"));
+        put("Erika", new GymLeaderEvent().setEvent("EVENT_BEAT_ERIKA").setBadge("BIT_RAINBOWBADGE"));
+        put("Koga", new GymLeaderEvent().setEvent("EVENT_BEAT_KOGA").setBadge("BIT_SOULBADGE"));
+        put("Sabrina", new GymLeaderEvent().setEvent("EVENT_BEAT_SABRINA").setBadge("BIT_MARSHBADGE"));
+        put("Blaine", new GymLeaderEvent().setEvent("EVENT_BEAT_BLAINE").setBadge("BIT_VOLCANOBADGE"));
+        put("Giovanni", new GymLeaderEvent().setEvent("EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI").setBadge("BIT_EARTHBADGE"));
     }};
 
     private Map<String, GymEvent> listGymEvent = new HashMap<>() {{
-        put("ViridianGym", new GymEvent().setLinesSetEvents(new Integer[]{97}).setLinesCheckEvents(new Integer[]{144,277}).setBadgeNumber(7).setLinesBadge(new Integer[]{110,112}));
-        put("CeladonGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{73}).setBadgeNumber(3).setLinesBadge(new Integer[]{47,49}));
-        put("SaffronGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{74,146}).setBadgeNumber(5).setLinesBadge(new Integer[]{47,49}));
-        put("VermilionGym", new GymEvent().setLinesSetEvents(new Integer[]{49}).setLinesCheckEvents(new Integer[]{81}).setBadgeNumber(2).setLinesBadge(new Integer[]{62,64}));
-        put("CeruleanGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{64,129}).setBadgeNumber(1).setLinesBadge(new Integer[]{47,49}));
-        put("PewterGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{69}).setBadgeNumber(0).setLinesBadge(new Integer[]{47,49}));
-        put("FuchsiaGym", new GymEvent().setLinesSetEvents(new Integer[]{36}).setLinesCheckEvents(new Integer[]{74,178}).setBadgeNumber(4).setLinesBadge(new Integer[]{49,51}));
-        put("CinnabarGym", new GymEvent().setLinesSetEvents(new Integer[]{115}).setLinesCheckEvents(new Integer[]{165,333}).setBadgeNumber(6).setLinesBadge(new Integer[]{128,130}));
+        put("ViridianGym", new GymEvent().setLinesSetEvents(new Integer[]{97}).setLinesCheckEvents(new Integer[]{145,278}).setBadge("BIT_EARTHBADGE").setLinesBadge(new Integer[]{110,112}));
+        put("CeladonGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{74}).setBadge("BIT_RAINBOWBADGE").setLinesBadge(new Integer[]{47,49}));
+        put("SaffronGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{75,147}).setBadge("BIT_MARSHBADGE").setLinesBadge(new Integer[]{47,49}));
+        put("VermilionGym", new GymEvent().setLinesSetEvents(new Integer[]{49}).setLinesCheckEvents(new Integer[]{82}).setBadge("BIT_THUNDERBADGE").setLinesBadge(new Integer[]{62,64}));
+        put("CeruleanGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{65,130}).setBadge("BIT_CASCADEBADGE").setLinesBadge(new Integer[]{47,49}));
+        put("PewterGym", new GymEvent().setLinesSetEvents(new Integer[]{34}).setLinesCheckEvents(new Integer[]{70}).setBadge("BIT_BOULDERBADGE").setLinesBadge(new Integer[]{47,49}));
+        put("FuchsiaGym", new GymEvent().setLinesSetEvents(new Integer[]{36}).setLinesCheckEvents(new Integer[]{75,179}).setBadge("BIT_SOULBADGE").setLinesBadge(new Integer[]{49,51}));
+        put("CinnabarGym", new GymEvent().setLinesSetEvents(new Integer[]{115}).setLinesCheckEvents(new Integer[]{165,333}).setBadge("BIT_VOLCANOBADGE").setLinesBadge(new Integer[]{128,130}));
     }};
 
     public CitiesGymProcessor(IFileManager asmFileManager, IFileParser asmFileParser) {
@@ -74,7 +74,7 @@ public class CitiesGymProcessor {
         String cityFilePath = MAP_OBJECTS_FILEPATH + city;
         String[] cityAsm = this.asmFileManager.read(cityFilePath);
         Integer gymLineNumber = this.cityGymsLineNumber.get(city);
-        cityAsm[gymLineNumber] = this.asmFileParser.editLine(cityAsm[gymLineNumber], gymToReplace, 4);
+        cityAsm[gymLineNumber] = this.asmFileParser.editLine(cityAsm[gymLineNumber], gymToReplace, 3);
         addNewlineToViridianCity(city, cityAsm, gymLineNumber);
         this.asmFileManager.write(cityFilePath, cityAsm);
     }
@@ -89,8 +89,8 @@ public class CitiesGymProcessor {
         String gymNameCamelCase = convertToCamelCase(gymName);
         String gymFilePath = MAP_OBJECTS_FILEPATH + gymNameCamelCase;
         String[] gymAsm = this.asmFileManager.read(gymFilePath);
-        gymAsm[3] = this.asmFileParser.editLine(gymAsm[3], Integer.toString(warpId), 3);
-        gymAsm[4] = this.asmFileParser.editLine(gymAsm[4], Integer.toString(warpId), 3);
+        gymAsm[3] = this.asmFileParser.editLine(gymAsm[3], Integer.toString(warpId), 4);
+        gymAsm[4] = this.asmFileParser.editLine(gymAsm[4], Integer.toString(warpId), 4);
         this.asmFileManager.write(gymFilePath, gymAsm);
     }
 
