@@ -8,9 +8,9 @@ SEED := 14171
 SCRIPT_DIR := .
 MAVEN_BUILD := mvn clean compile assembly:single
 
-.PHONY: all dev build initialize shake compile
+.PHONY: all dev build initialize shake
 
-all: initialize build shake compile
+all: initialize build shake
 
 #Build randomizer
 build:
@@ -29,11 +29,6 @@ initialize:
 	@echo directory of the script = $(SCRIPT_DIR)
 	@echo ""
 
-#Initialize output directory
-	@echo "Initialize output directory"
-	@rm -Rf $(OUTPUT_DIR)
-	@mkdir -pv $(OUTPUT_DIR)
-
 #Initialize Cache directory
 	@echo "Initialize cache directory"
 	@rm -Rf $(CACHE_DIR)
@@ -50,14 +45,3 @@ shake:
       -pokemon_dir "$(CACHE_DIR)" \
       -output_dir "$(OUTPUT_DIR)"
 
-#Compile rom
-compile:
-	@echo ""
-	@echo "Copy the new CeladonGym map"
-	rm $(OUTPUT_DIR)maps/CeladonGym.blk
-	cp $(SCRIPT_DIR)/CeladonGym.blk $(OUTPUT_DIR)maps/CeladonGym.blk
-	@echo ""
-	@echo "Copy finished"
-	@echo ""
-	@echo "Compile rom"
-	cd $(OUTPUT_DIR) && chmod -Rf 777 . && $(MAKE)
