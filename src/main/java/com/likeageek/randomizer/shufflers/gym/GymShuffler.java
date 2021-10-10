@@ -65,14 +65,14 @@ public class GymShuffler implements IShuffler {
     }
 
     private List<City> buildCities() {
-        Gym pewterGym = gym().warpId(2).name(PEWTER_GYM).leader(Brock).pokemonRangeLevel(new Integer[]{12, 14}).build(); //.trainers(getTrainers(PEWTER_GYM))
-        Gym ceruleanGym = gym().warpId(3).name(CERULEAN_GYM).leader(Misty).pokemonRangeLevel(new Integer[]{18, 21}).build(); //trainers(getTrainers(CERULEAN_GYM))
-        Gym vermilionGym = gym().warpId(3).name(VERMILION_GYM).leader(LtSurge).pokemonRangeLevel(new Integer[]{18, 24}).build(); //trainers(getTrainers(VERMILION_GYM))
-        Gym celadonGym = gym().warpId(6).name(CELADON_GYM).leader(Erika).pokemonRangeLevel(new Integer[]{24, 29}).build(); //trainers(getTrainers(CELADON_GYM))
-        Gym fuchsiaGym = gym().warpId(5).name(FUCHSIA_GYM).leader(Koga).pokemonRangeLevel(new Integer[]{37, 43}).build(); //trainers(getTrainers(FUCHSIA_GYM))
-        Gym saffronGym = gym().warpId(2).name(SAFFRON_GYM).leader(Sabrina).pokemonRangeLevel(new Integer[]{37, 43}).build(); //trainers(getTrainers(SAFFRON_GYM))
-        Gym cinnarbarGym = gym().warpId(1).name(CINNABAR_GYM).leader(Blaine).pokemonRangeLevel(new Integer[]{40, 47}).build(); //trainers(getTrainers(CINNABAR_GYM))
-        Gym viridianGym = gym().warpId(4).name(VIRIDIAN_GYM).leader(Giovanni).pokemonRangeLevel(new Integer[]{42, 50}).build(); //trainers(getTrainers(VIRIDIAN_GYM))
+        Gym pewterGym = gym().warpId(3).name(PEWTER_GYM).leader(Brock).pokemonRangeLevel(new Integer[]{12, 14}).build(); //.trainers(getTrainers(PEWTER_GYM))
+        Gym ceruleanGym = gym().warpId(4).name(CERULEAN_GYM).leader(Misty).pokemonRangeLevel(new Integer[]{18, 21}).build(); //trainers(getTrainers(CERULEAN_GYM))
+        Gym vermilionGym = gym().warpId(4).name(VERMILION_GYM).leader(LtSurge).pokemonRangeLevel(new Integer[]{18, 24}).build(); //trainers(getTrainers(VERMILION_GYM))
+        Gym celadonGym = gym().warpId(7).name(CELADON_GYM).leader(Erika).pokemonRangeLevel(new Integer[]{24, 29}).build(); //trainers(getTrainers(CELADON_GYM))
+        Gym fuchsiaGym = gym().warpId(6).name(FUCHSIA_GYM).leader(Koga).pokemonRangeLevel(new Integer[]{37, 43}).build(); //trainers(getTrainers(FUCHSIA_GYM))
+        Gym saffronGym = gym().warpId(3).name(SAFFRON_GYM).leader(Sabrina).pokemonRangeLevel(new Integer[]{37, 43}).build(); //trainers(getTrainers(SAFFRON_GYM))
+        Gym cinnarbarGym = gym().warpId(2).name(CINNABAR_GYM).leader(Blaine).pokemonRangeLevel(new Integer[]{40, 47}).build(); //trainers(getTrainers(CINNABAR_GYM))
+        Gym viridianGym = gym().warpId(5).name(VIRIDIAN_GYM).leader(Giovanni).pokemonRangeLevel(new Integer[]{42, 50}).build(); //trainers(getTrainers(VIRIDIAN_GYM))
 
         return asList(
                 city().name(PewterCity).gym(pewterGym).build(),
