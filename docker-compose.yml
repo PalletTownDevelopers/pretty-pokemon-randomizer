@@ -3,7 +3,7 @@ version: '3.5'
 services:
   postgres:
     container_name: db_pretty_randomizer
-    image: postgres
+    image: postgres:13
     environment:
       POSTGRES_USER: "randomizer"
       POSTGRES_PASSWORD: "password"
