@@ -13,7 +13,7 @@ public class FakeAsmFileManager implements IFileManager {
     @Override
     public void write(String filePath, String[] asmSourceCode) {
         try {
-            FileWriter fileWriter = new FileWriter("/home/likeageek/Projects/randomizer-output/" + filePath + ".asm");
+            FileWriter fileWriter = new FileWriter("../randomizer-output/" + filePath + ".asm");
             PrintWriter printWriter = new PrintWriter(fileWriter);
             printWriter.print(join("\n\t", asmSourceCode));
             printWriter.close();
@@ -27,7 +27,7 @@ public class FakeAsmFileManager implements IFileManager {
     public String[] read(String filePath) {
         String[] fileContent = new String[0];
         try {
-            fileContent = new String(readAllBytes(get("/home/likeageek/Projects/randomizer-cache/" + filePath + ".asm"))).split("\n\t");
+            fileContent = new String(readAllBytes(get("../randomizer-pokered" + filePath + ".asm"))).split("\n\t");
         } catch (IOException e) {
             e.printStackTrace();
         }

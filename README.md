@@ -4,12 +4,11 @@
 1. Install the last version of java
 2. Install node and npm
 3. Install Maven` for packages management
-4. Clone pokered and copy this into ui/tmp
+4. Clone pokered
 5. Rename the ui/config/config.example.json to ui/config/config.json
 6. In config.json, put the correct configuration for postgres database
 ```
 git clone https://github.com/pret/pokered.git ~/wd/pokemon/pokered
-cp -r ~/wd/pokemon/pokered ui/tmp/
 ```
 
 ### Installation
@@ -35,12 +34,12 @@ mkdir ./ui/data
 cp config.example.json config.json
 ````
 
-### Launch DB with docker-compose
+### Launch DB and API with docker-compose
 ```
-docker-compose up -d
+docker-compose up --build -d
 ```
 
-### You want to look log of DB
+### You want to look log of DB and API
 ```
 docker-compose logs -f
 ```

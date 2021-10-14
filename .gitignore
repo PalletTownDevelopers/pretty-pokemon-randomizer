@@ -40,7 +40,6 @@ yarn.lock
 /ui/node_modules/
 /ui/package-lock.json
 /ui/yarn.lock
-/ui/tmp/randomizer-cache*/
 /ui/tmp/randomizer-output*/
 /ui/tmp/pokered/
 /ui/public/*.gbc

@@ -38,10 +38,6 @@ public class App {
                 gameShaker.init();
                 gameShaker.shake();
 
-                System.out.println("Copy the new CeladonGym map\n");
-                FileUtils.delete(new File(configuration.getOutputDirectory() + "/maps/CeladonGym.blk"));
-                FileUtils.copyFile(new File("CeladonGym.blk"),new File(configuration.getOutputDirectory() + "/maps/CeladonGym.blk"));
-
                 System.out.println("Set Permission for output directory\n");
                 outputDirectory.setExecutable(true);
                 outputDirectory.setReadable(true);

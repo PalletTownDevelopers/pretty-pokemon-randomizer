@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-    const sass = require('dart-sass');
+    const sass = require('sass');
 
     require('load-grunt-tasks')(grunt);
 
