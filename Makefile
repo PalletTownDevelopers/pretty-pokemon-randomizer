@@ -1,6 +1,5 @@
 OUTPUT_DIR := $(HOME)/wd/pokemon/randomizer-output/
-CACHE_DIR := $(HOME)/wd/pokemon/randomizer-cache/
-CODE_DISASSEMBLY := $(HOME)/wd/pokemon/pokered/
+CODE_DISASSEMBLY := $(HOME)/wd/pokemon/randomizer-pokered/
 
 #SEED := $$RANDOM
 SEED := 14171
@@ -8,9 +7,9 @@ SEED := 14171
 SCRIPT_DIR := .
 MAVEN_BUILD := mvn clean compile assembly:single
 
-.PHONY: all dev build initialize shake
+.PHONY: all dev build displayParams shake
 
-all: initialize build shake
+all: displayParams build shake
 
 #Build randomizer
 build:
@@ -19,20 +18,14 @@ build:
 	cp -f target/randomizer* ui/randomizer.jar
 	@echo "randomizer's build finished"
 
-#Initialize randomizer's directories
-initialize:
+#Display parameters
+displayParams:
 	@echo $(OUTPUT_DIR)
 	@echo Developpement mode
 	@echo output dir = $(OUTPUT_DIR)
-	@echo cache dir = $(CACHE_DIR)
+	@echo pokemon dir = $(CODE_DISASSEMBLY)
 	@echo seed = $(SEED)
 	@echo directory of the script = $(SCRIPT_DIR)
-	@echo ""
-
-#Initialize Cache directory
-	@echo "Initialize cache directory"
-	@rm -Rf $(CACHE_DIR)
-	@cp -r $(CODE_DISASSEMBLY) $(CACHE_DIR)
 	@echo ""
 
 #Launch shaker
@@ -42,6 +35,6 @@ shake:
 	@java -jar "$(SCRIPT_DIR)/"target/randomizer-1.0-SNAPSHOT-jar-with-dependencies.jar \
       -shake \
       -seed "$(SEED)" \
-      -pokemon_dir "$(CACHE_DIR)" \
+      -pokemon_dir "$(CODE_DISASSEMBLY)" \
       -output_dir "$(OUTPUT_DIR)"
 

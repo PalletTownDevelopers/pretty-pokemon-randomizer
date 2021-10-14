@@ -14,11 +14,11 @@ class AsmFileManagerTest {
 
     @Test
     void shouldCopyPokemonFilesToOutputPath() throws IOException {
-        AsmFileManager asmFileManager = new AsmFileManager("/home/likeageek/Projects/randomizer-cache/", "/home/likeageek/Projects/randomizer-output/");
+        AsmFileManager asmFileManager = new AsmFileManager("../randomizer-pokered", "../randomizer-output/");
 
         asmFileManager.copyGame();
 
-        try (Stream<Path> files = Files.list(Paths.get("/home/likeageek/Projects/randomizer-output/"))) {
+        try (Stream<Path> files = Files.list(Paths.get("../randomizer-output/"))) {
             assertThat(files.count()).isEqualTo(46l);
         }
     }

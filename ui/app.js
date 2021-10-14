@@ -21,23 +21,20 @@ router.get('/', (req, res) => {
 
 router.post('/generate', (req, res) => {
     let params = req.body
-    let seed = params.seed
-    let timestamp = params.timestamp
-    let randomizerOutput = __dirname + '/tmp/randomizer-output_' + timestamp
-    let randomizerCache = __dirname + '/tmp/randomizer-cache_' + timestamp
+    let randomizerOutput = __dirname + '/tmp/randomizer-output_' + params.timestamp
     let codeDisassembly = __dirname + '/tmp/pokered/'
 
-    execSync('mkdir -pv ' + randomizerCache)
-    execSync('cp -r ' + codeDisassembly + '* ' + randomizerCache)
-
-    let commandRandomizer = 'java -jar "' + __dirname + '/randomizer.jar" -shake -seed ' + seed + ' -pokemon_dir "' + randomizerCache + '" -output_dir "' + randomizerOutput + '"'
+    let commandRandomizer = 'java -jar "' + __dirname + '/randomizer.jar" -shake -seed ' + params.seed + ' -pokemon_dir "' + codeDisassembly + '" -output_dir "' + randomizerOutput + '"'
     execSync(commandRandomizer)
 
-    let nameRom = __dirname + '/public/pokered_' + timestamp + '.gbc'
-    execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
+    let nameRom = __dirname + '/public/pokered_' + params.timestamp + '.gbc'
+    if(params.debug) {
+        execSync("mv " + randomizerOutput + '/pokeblue_debug.gbc ' + nameRom)
+    } else {
+        execSync("mv " + randomizerOutput + '/pokered.gbc ' + nameRom)
+    }
     exec('rm -Rf ' + randomizerOutput)
-    exec('rm -Rf ' + randomizerCache)
-    let query = "INSERT INTO stat_option (seed, info) VALUES(" + seed + ",'" + JSON.stringify(params) + "')"
+    let query = "INSERT INTO stat_option (seed, info) VALUES(" + params.seed + ",'" + JSON.stringify(params) + "')"
     client.query(query)
         .catch(err => {
             console.log(err)

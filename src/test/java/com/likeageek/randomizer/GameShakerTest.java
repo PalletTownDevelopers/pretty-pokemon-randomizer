@@ -22,8 +22,8 @@ class GameShakerTest {
 
         Configuration configuration = configuration()
                 .seed(424242)
-                .pokemonDirectory("/home/likeageek/Projects/randomizer-output/")
-                .outputDirectory("/home/likeageek/Projects/randomizer-output/")
+                .pokemonDirectory("../randomizer-output/")
+                .outputDirectory("../randomizer-output/")
                 .build();
         gameShaker = new GameShaker(configuration, new FakeAsmFileManager(), new AsmFileParser());
         gameShaker.init();

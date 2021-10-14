@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AppTest {
 
     @Test
-    void shouldDisplayShuffledArenas_whenRunGameShaker() throws ParseException, IOException {
+    void shouldDisplayShuffledArenas_whenRunGameShaker() throws ParseException, IOException, InterruptedException {
         PrintStream printStream = new PrintStream("out.log");
         System.setOut(printStream);
-        App.main(new String[]{"-shake", "-seed", "424242", "-pokemon_dir", "/home/likeageek/Projects/randomizer-cache/", "-output_dir", "/home/likeageek/Projects/randomizer-output/"});
+        App.main(new String[]{"-shake", "-seed", "424242", "-pokemon_dir", "../randomizer-pokered/", "-output_dir", "../randomizer-output/"});
         String consoleOutput = new String(readAllBytes(get("out.log")));
         assertThat(consoleOutput).contains("gameshaker for pokemonredblue");
     }
