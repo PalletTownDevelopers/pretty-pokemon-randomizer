@@ -43,8 +43,16 @@ public class App {
                 outputDirectory.setReadable(true);
                 outputDirectory.setWritable(true);
 
+                String makeArgs = "";
+                if(cmd.hasOption("debug")) {
+                    makeArgs += "DEBUG=1 ";
+                }
+                if(cmd.hasOption("sprite_yellow")) {
+                    makeArgs += "SPRITE_YELLOW=1 ";
+                }
+
                 System.out.println("Compile the rom\n");
-                runShellCommand(new String[]{"bash","-c","cd " + configuration.getOutputDirectory() + " && make"});
+                runShellCommand(new String[]{"bash","-c","cd " + configuration.getOutputDirectory() + " && make red " + makeArgs});
             }
         }
     }
@@ -55,6 +63,8 @@ public class App {
         options.addOption("shake", false, "shake this game");
         options.addOption("pokemon_dir", true, "path to disassembled pokemon game");
         options.addOption("output_dir", true, "path to shuffled disassembled pokemon game");
+        options.addOption("debug", false, "set the debug mode of pokemon");
+        options.addOption("sprite_yellow", false, "Replace pokemon yellow sprite instead of pokemon red");
         return options;
     }
 

@@ -36,5 +36,8 @@ shake:
       -shake \
       -seed "$(SEED)" \
       -pokemon_dir "$(CODE_DISASSEMBLY)" \
-      -output_dir "$(OUTPUT_DIR)"
+      -output_dir "$(OUTPUT_DIR)" \
+      -debug \
+      -sprite_yellow \
+
 

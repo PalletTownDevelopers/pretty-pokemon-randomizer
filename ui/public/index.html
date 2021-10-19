@@ -31,6 +31,10 @@
                                 <label class="col-sm-1 col-form-label align-top d-inline-block pb-1">Debug : </label>
                                 <input type="checkbox" id="input_debug" value=true>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label align-top d-inline-block pb-1">Yellow Sprite : </label>
+                                <input type="checkbox" id="input_sprite_yellow" value=true>
+                            </div>
                         </fieldset>
                     <input type="button" id="send-settings" class="btn btn-sm btn-success" value="Submit"/>
                 </form>
@@ -53,11 +57,18 @@
             } else {
                 debug = false
             }
+            let spriteYellow;
+            if(document.querySelector("#input_sprite_yellow").checked) {
+                spriteYellow = true
+            } else {
+                spriteYellow = false
+            }
             document.querySelector("#send-settings").setAttribute("disabled", "disabled")
             axios.post('/generate', {
                 seed: parseInt(document.querySelector("#seed").value),
                 timestamp: timestamp,
-                debug: debug
+                debug: debug,
+                spriteYellow: spriteYellow
             })
             .then(() => {
                 let element = document.createElement("a")
