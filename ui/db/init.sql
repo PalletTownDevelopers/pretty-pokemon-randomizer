@@ -4,3 +4,5 @@ CREATE TABLE ppr_rom
     seed       int    NOT NULL,
     parameters jsonb   NOT NULL
 );
+
+CREATE SEQUENCE ppr_rom_id_seq START 1;
