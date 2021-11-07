@@ -1,7 +1,10 @@
 package com.likeageek.randomizer;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import static java.lang.String.join;
 
+@ApplicationScoped
 public class AsmFileParser implements IFileParser {
 
     public String editLine(String line, String value, int position) {

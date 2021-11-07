@@ -13,7 +13,7 @@ public class Configuration {
         this.seed = seed;
     }
 
-    String getPokemonDirectory() {
+    public String getPokemonDirectory() {
         return pokemonDirectory;
     }
 
@@ -21,7 +21,7 @@ public class Configuration {
         this.pokemonDirectory = pokemonDirectory;
     }
 
-    String getOutputDirectory() {
+    public String getOutputDirectory() {
         return outputDirectory;
     }
 

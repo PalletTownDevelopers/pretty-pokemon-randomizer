@@ -1,5 +1,6 @@
 package com.likeageek.randomizer;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,15 +12,20 @@ import static java.nio.file.Paths.get;
 import static org.apache.commons.io.FileUtils.copyDirectory;
 
 
+@ApplicationScoped
 public class AsmFileManager implements IFileManager {
     private static final String SAVE_FILE_SUFFIX = ".asm";
     private static final String SPLITTER_REGEXP = "\n\t";
     private String pokemonPath;
     private String outputPath;
 
-    AsmFileManager(String pokemonPath, String outputPath) {
+    public AsmFileManager(String pokemonPath, String outputPath) {
         this.pokemonPath = pokemonPath;
         this.outputPath = outputPath;
+    }
+
+    public AsmFileManager(){
+
     }
 
     public void write(String filePath, String[] asmSourceCode) {

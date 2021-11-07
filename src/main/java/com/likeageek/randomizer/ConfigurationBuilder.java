@@ -7,21 +7,21 @@ public final class ConfigurationBuilder {
         configuration = new Configuration();
     }
 
-    static ConfigurationBuilder configuration() {
+    public static ConfigurationBuilder configuration() {
         return new ConfigurationBuilder();
     }
 
-    ConfigurationBuilder seed(long seed) {
+    public ConfigurationBuilder seed(long seed) {
         configuration.setSeed(seed);
         return this;
     }
 
-    ConfigurationBuilder pokemonDirectory(String pokemonPath) {
+    public ConfigurationBuilder pokemonDirectory(String pokemonPath) {
         configuration.setPokemonDirectory(pokemonPath);
         return this;
     }
 
-    ConfigurationBuilder outputDirectory(String outputPath) {
+    public ConfigurationBuilder outputDirectory(String outputPath) {
         configuration.setOutputDirectory(outputPath);
         return this;
     }
