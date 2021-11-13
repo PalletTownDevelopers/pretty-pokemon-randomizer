@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
 
 @Path("/v1/pretty-pokemon-randomizer")
 public class RandomizerController {
@@ -19,10 +20,10 @@ public class RandomizerController {
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("/generate-rom/{seed}")
-    public Response generateRom(@PathParam String seed) throws URISyntaxException, IOException, InterruptedException {
-        File romGenerated = service.generate(seed);
-        service.saveInformation(seed);
+    @Path("/generate-rom")
+    public Response generateRom(RomInformation romInformation) throws URISyntaxException, IOException, InterruptedException {
+        File romGenerated = service.generate(romInformation);
+        service.saveInformation(romInformation);
         Response.ResponseBuilder response = Response.ok((Object) romGenerated);
         response.header("Content-Disposition", "attachment;filename=" + romGenerated.getName());
         return response.build();

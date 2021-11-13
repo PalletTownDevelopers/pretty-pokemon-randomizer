@@ -1,7 +1,0 @@
-{
-    "user": "user",
-    "host": "localhost",
-    "database": "randomizer",
-    "password": "password",
-    "port": 5432
-}

@@ -14,18 +14,17 @@ public class RandomizerControllerTest {
         String romParameters = "{\n" +
                 "    \"seed\": \"42\",\n" +
                 "    \"timestamp\": 123456789,\n" +
-                "    \"option\": {\n" +
-                "      \"arena\" : true\n" +
+                "    \"parameters\": {\n" +
+                "      \"shuffleGyms\" : true\n" +
                 "    },\n" +
                 "    \"customization\": {\n" +
                 "      \"yellowSprite\": true\n" +
                 "    }\n" +
                 "  }";
         given()
-                .pathParam("seed", "42")
                 .header("Content-Type", "application/json")
                 .body(romParameters)
-                .when().get("/v1/pretty-pokemon-randomizer/generate-rom/{seed}")
+                .when().get("/v1/pretty-pokemon-randomizer/generate-rom")
                 .then()
                 .statusCode(200)
                 .body(is("a randomized rom"));

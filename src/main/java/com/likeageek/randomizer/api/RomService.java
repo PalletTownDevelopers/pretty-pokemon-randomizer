@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static com.likeageek.randomizer.ConfigurationBuilder.configuration;
-import static java.lang.Long.parseLong;
 
 @Singleton
 public class RomService {
@@ -32,10 +31,10 @@ public class RomService {
     @ApplicationScoped //TODO
     AsmFileParser asmFileParser;
 
-    public File generate(String seed) throws IOException, InterruptedException {
+    public File generate(RomInformation romInformation) throws IOException, InterruptedException {
         System.out.println("gameshaker for pokemonredblue");
         Configuration configuration = configuration()
-                .seed(parseLong(seed))
+                .seed(romInformation.getSeed())
                 .pokemonDirectory("/tmp/pokered/")
                 .outputDirectory("/tmp/randomizer-output_" + "timestamp") //FIXME
                 .build();
@@ -96,8 +95,8 @@ public class RomService {
     }
 
     @Transactional
-    public void saveInformation(String seed) {
-        Rom entity = new Rom(Integer.parseInt(seed));
+    public void saveInformation(RomInformation romInformation) {
+        Rom entity = new Rom(romInformation.getSeed(), romInformation);
         repository.persist(entity);
     }
 }
